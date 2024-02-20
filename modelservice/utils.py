@@ -145,6 +145,17 @@ class Data_Base_Util(Config):
         else:
             return [is_success, return_value]
 
+    def select_data_within_column(self,db,table_name,column_name):
+
+
+        is_success, return_value = self.run_sql(db,
+                                                cmd_list=[f'''SELECT {column_name} FROM {table_name}'''])
+        if not is_success:
+            return None
+
+        else:
+            return [is_success, return_value]
+
 
 
 
