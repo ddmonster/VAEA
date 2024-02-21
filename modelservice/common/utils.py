@@ -28,7 +28,8 @@ class Data_Base_Util(Config):
             for cmd in cmd_list:
                 cursor = c.execute(cmd)
                 return_value = []
-
+                # value = cursor.fetchall()
+                # print(value)
                 for row in cursor:
                     return_value.append(row)
 

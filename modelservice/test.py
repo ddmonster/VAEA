@@ -3,7 +3,7 @@ import os
 import sqlite3
 import sys
 import datetime
-from config import Config
+from modelservice.common.config import Config
 
 
 

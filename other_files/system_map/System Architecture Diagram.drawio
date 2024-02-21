@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-02-21T08:07:50.104Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/23.1.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="OVMSKOLO5hRKJqC5ADMR" version="23.1.5" type="device">
+<mxfile host="Electron" modified="2024-02-19T20:46:57.091Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/23.1.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="ikKz37z-XieqokQ9wUw2" version="23.1.5" type="device">
   <diagram name="第 1 页" id="-PWBbvEQKRFpdX3cdJ4J">
-    <mxGraphModel dx="1816" dy="577" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="989" dy="577" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -69,9 +69,6 @@
         </mxCell>
         <mxCell id="OTL51iOK556OMJYErmxO-39" value="Front-end" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
           <mxGeometry x="100" y="250" width="630" height="240" as="geometry" />
-        </mxCell>
-        <mxCell id="OTL51iOK556OMJYErmxO-40" value="&lt;h1&gt;特征工程&lt;/h1&gt;&lt;p&gt;1. 从给定句子里提炼产品特征词。这些词可能包括产品特征类型，产品特征值，组成json&lt;/p&gt;&lt;p&gt;2. 从json中，键与数据库中的列名匹配。然后值匹配，给出所有匹配的行&lt;/p&gt;&lt;p&gt;3. 行筛选，选择最可能的一个产品&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;" style="text;html=1;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="-140" y="550" width="190" height="240" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

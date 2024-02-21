@@ -1,7 +1,7 @@
 import copy
 from tqdm import tqdm
 from datasets import load_dataset
-from utils import Data_Base_Util
+from modelservice.common.utils import Data_Base_Util
 
 
 

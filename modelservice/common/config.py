@@ -6,7 +6,7 @@ class Config():
         pass
 
     def db_folder_path(self):
-        return './database'
+        return r'C:\Users\Johnson-ITX\Desktop\VAEA\modelservice\database'
 
     def db_name(self):
         return 'amazon_data.db'
