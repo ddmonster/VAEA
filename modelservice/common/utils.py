@@ -150,7 +150,7 @@ class Data_Base_Util(Config):
         else:
             return [is_success, return_value]
 
-    def select_data_within_kv(self, db, table_name, kv):
+    def select_data_within_kv(self,db,table_name,kv):
 
         kv_body = ''
 
@@ -186,7 +186,7 @@ class Data_Base_Util(Config):
         else:
             return [is_success, return_value]
 
-    def get_a_row(self, db,table_name,row_num):
+    def get_a_row(self,db,table_name,row_num):
 
         is_success, return_value = self.run_sql(db,
                                                 cmd_list=[f'''SELECT * FROM {table_name} LIMIT 1 OFFSET {row_num}'''])
@@ -197,16 +197,20 @@ class Data_Base_Util(Config):
             return [is_success, return_value]
 
 
+
+
 if __name__ == '__main__':
 
     # from datasets import load_dataset
     #
     dbu = Data_Base_Util()
-    result = dbu.get_data_num(db = dbu.db_path(),table_name=dbu.table_name())
-    print(result[1][0][0])
-    result = dbu.get_a_row(db = dbu.db_path(),table_name=dbu.table_name(),row_num=5)
-    print(result[1][0])
-    print(len(result[1]))
+    result = dbu.select_data_within_kv(db = dbu.db_path(),table_name=dbu.table_name(),kv = {'product_name':'SKY LINE VTL-5424 2000-Watt Deep Fryer (Multicolour)'})
+    print(result)
+    # result = dbu.get_data_num(db = dbu.db_path(),table_name=dbu.table_name())
+    # print(result[1][0][0])
+    # result = dbu.get_a_row(db = dbu.db_path(),table_name=dbu.table_name(),row_num=5)
+    # print(result[1][0])
+    # print(len(result[1]))
     # dbu.create_amazon_data_db()
     #
     # dataset = load_dataset("tonypaul2020/amazon_product_data")
