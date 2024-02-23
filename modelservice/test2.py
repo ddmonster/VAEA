@@ -117,7 +117,7 @@ class Ollama_test():
         format_instructions = oup_parser.get_format_instructions()
 
         template = """
-           You are a professional product introduction bot that will extract product information from the user's input and fill in the json corresponding key-value pairs. If you don't find a feature that matches a key in the json from the user's input, then the value in this key should be None.
+           You are a professional product introduction bot that will extract product information from the user's input and fill in the json corresponding key-value pairs. If you don't find a feature that matches a key in the json from the user's input, then the value in this key should be null.
 
            {format_instructions}
 
@@ -129,8 +129,10 @@ class Ollama_test():
         prompt = PromptTemplate(input_variables=["user_input"], template=template,
                                 partial_variables={"format_instructions": format_instructions})
         promptValue = prompt.format(user_input="I'd like to buy a red PHILIPS fryer that has 3.2 litres and mades by plastic and the maximum energy consumption is two thousand wattage.I can use it to roast, broil and steam. In addition the product cannot be sold for more than 3000 rupee and the home kitchen rank is about 23000. Also, it should have the nonstick.Finally, it should be made in China and weight less than six kilograms.")
-        # print(promptValue)
-        print(self.llm(promptValue))
+
+        result = self.llm(promptValue)
+
+        return result
 
     def ollama_chain(self):
         #第一个任务
@@ -213,10 +215,29 @@ class Ollama_test():
         print(output)
 
 if __name__ == '__main__':
-    ollama = Ollama_test()
+
+
     # ollama.ollama_summary_split()
     # ollama.ollama_summary()
-    ollama.ollama_json2()
+    import re,json
+    ollama = Ollama_test()
+    result = ollama.ollama_json2()
+
+
+
+    # 使用正则表达式匹配JSON数据
+    pattern = r'\{.*\}'
+    match = re.search(pattern, result, re.DOTALL)
+    if match:
+        json_data = match.group()
+        try:
+            json_data = json.loads(json_data)
+            print(json_data)  # 打印格式化后的JSON数据
+        except json.JSONDecodeError as e:
+            Exception(f"Error decoding JSON: {e}")
+    else:
+        print("No JSON data found.")
+
     # ollama.ollama_chain()
     # ollama.ollama_prompt2()
     # ollama.ollama_prompt1('广东深圳')

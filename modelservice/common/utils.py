@@ -3,8 +3,28 @@ import os
 import sqlite3
 import sys
 import datetime
-from config import Config
+import re
+import json
+from modelservice.common.config import Config
 
+
+class Common_Utils():
+    def __init__(self):
+        pass
+
+    def string_2_json(self,json_string):
+        pattern = r'\{.*\}'
+        match = re.search(pattern, json_string, re.DOTALL)
+        if match:
+            json_data = match.group()
+            try:
+                json_data = json.loads(json_data)
+                return json_data
+
+            except json.JSONDecodeError as e:
+                Exception(f"Error decoding JSON: {e}")
+        else:
+            Exception("No JSON data match.")
 
 
 class Data_Base_Util(Config):
@@ -148,7 +168,6 @@ class Data_Base_Util(Config):
 
     def select_data_within_column(self,db,table_name,column_name):
 
-
         is_success, return_value = self.run_sql(db,
                                                 cmd_list=[f'''SELECT {column_name} FROM {table_name}'''])
         if not is_success:
@@ -157,46 +176,70 @@ class Data_Base_Util(Config):
         else:
             return [is_success, return_value]
 
+    def get_data_num(self,db,table_name):
 
+        is_success, return_value = self.run_sql(db,
+                                                cmd_list=[f'''SELECT COUNT(*) FROM  {table_name}'''])
+        if not is_success:
+            return None
+
+        else:
+            return [is_success, return_value]
+
+    def get_a_row(self, db,table_name,row_num):
+
+        is_success, return_value = self.run_sql(db,
+                                                cmd_list=[f'''SELECT * FROM {table_name} LIMIT 1 OFFSET {row_num}'''])
+        if not is_success:
+            return None
+
+        else:
+            return [is_success, return_value]
 
 
 if __name__ == '__main__':
-    from datasets import load_dataset
 
-    dbu = Data_Base_Util()
-    dbu.create_amazon_data_db()
-
-    dataset = load_dataset("tonypaul2020/amazon_product_data")
-    print(dataset['train'][0], len(dataset['train']))
-    dataset_1 = copy.deepcopy(dataset['train'])
-    print(dataset_1[0].keys(),len(dataset_1[0].keys()))
-    for dataset_1_i in dataset_1:
-
-    # dataset_1_0['url1'] = dataset_1_0.pop('urls')
+    # from datasets import load_dataset
     #
-    # print(dataset_1_0['url1'])
-        for k,v in dataset_1_i.copy().items():
-            new_k = k
-            if ' ' in k:
-                new_k = k.replace(' ','_')
-                dataset_1_i[new_k] = dataset_1_i.pop(k)
-
-            if k == 'Capacity':
-                new_k = 'capacity_1'
-                dataset_1_i[new_k] = dataset_1_i.pop(k)
-        #
-            if isinstance(v,float):
-                dataset_1_i[new_k]= str(v)
-
-            elif v is None:
-        #
-                dataset_1_i[new_k] = 'None'
-
-        print(dataset_1_i)
-        #
-
-
-        dbu.insert_data_within_kv(db=dbu.db_path(),table_name=dbu.table_name(),kv=dataset_1_i)
+    dbu = Data_Base_Util()
+    result = dbu.get_data_num(db = dbu.db_path(),table_name=dbu.table_name())
+    print(result[1][0][0])
+    result = dbu.get_a_row(db = dbu.db_path(),table_name=dbu.table_name(),row_num=5)
+    print(result[1][0])
+    print(len(result[1]))
+    # dbu.create_amazon_data_db()
+    #
+    # dataset = load_dataset("tonypaul2020/amazon_product_data")
+    # print(dataset['train'][0], len(dataset['train']))
+    # dataset_1 = copy.deepcopy(dataset['train'])
+    # print(dataset_1[0].keys(),len(dataset_1[0].keys()))
+    # for dataset_1_i in dataset_1:
+    #
+    # # dataset_1_0['url1'] = dataset_1_0.pop('urls')
+    # #
+    # # print(dataset_1_0['url1'])
+    #     for k,v in dataset_1_i.copy().items():
+    #         new_k = k
+    #         if ' ' in k:
+    #             new_k = k.replace(' ','_')
+    #             dataset_1_i[new_k] = dataset_1_i.pop(k)
+    #
+    #         if k == 'Capacity':
+    #             new_k = 'capacity_1'
+    #             dataset_1_i[new_k] = dataset_1_i.pop(k)
+    #     #
+    #         if isinstance(v,float):
+    #             dataset_1_i[new_k]= str(v)
+    #
+    #         elif v is None:
+    #     #
+    #             dataset_1_i[new_k] = 'None'
+    #
+    #     print(dataset_1_i)
+    #     #
+    #
+    #
+    #     dbu.insert_data_within_kv(db=dbu.db_path(),table_name=dbu.table_name(),kv=dataset_1_i)
 
 
 
