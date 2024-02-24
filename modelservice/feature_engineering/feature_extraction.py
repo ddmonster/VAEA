@@ -5,9 +5,19 @@ class Feature_Engineering(LLM_Model):
     def __init__(self):
         super().__init__()
         self.cu =Common_Utils()
+        self.init_feature_group = {
+            'basic_info': ['product_name', 'brand', 'Manufacturer', 'Model_Name'],
+            'popularity': ['star_rating', 'home_kitchen_rank', 'air_fryers_rank', 'number_of_reviews'],
+            'price': ['mrp', 'sale_price'],
+            'basic_functions': ['colour', 'Material', 'capacity', 'wattage', 'Weight'],
+            'advanced_functions':['Has_Nontick_Coating', 'Max_Temperature_Setting', 'Control_Method', 'Special_Feature','Recommended_Users_For_Product'],
+            'source': ['country_of_origin'],
+            'description': [ 'description'],
+            'others': ['asin', 'capacity_1', 'imported_by','technical_details']
+        }
 
     def extraction(self,sentence):
-        feature_string = self.ollama_json(sentence=sentence)
+        feature_string = self.ollama_extraction_feature(sentence=sentence)
         feature_json = self.cu.string_2_json(json_string=feature_string)
         print(feature_json)
 
@@ -15,38 +25,27 @@ class Feature_Engineering(LLM_Model):
 
     def filter(self,item_tuple):
         product_json = self.cu.tuple_2_json(tuple_string=item_tuple)
-        init_feature_group = {
-            'basic_info': ['product_name', 'brand', 'Manufacturer', 'Model_Name'],
-            'popularity': ['star_rating', 'home_kitchen_rank', 'air_fryers_rank', 'number_of_reviews'],
-            'price': ['mrp', 'sale_price'],
-            'functions': ['colour', 'capacity', 'wattage', 'Weight', 'Has_Nontick_Coating', 'Material', 'Control_Method',
-                          'Recommended_Users_For_Product', 'Special_Feature', 'Max_Temperature_Setting'],
-            'source': ['country_of_origin'],
-            'description': [ 'description'],
-            'others': ['asin', 'capacity_1', 'imported_by','technical_details']
-        }
-        # aa = {"Special Feature": "Programmable", "Colour": "T22-Black", "Capacity": "5 litres", "Recommended Uses For Product": "Reheat", "Item Weight": "5.41 Kilograms", "Brand": "Proscenic", "Wattage": "1700 Watts", "Model Name": "T22", "Has Nonstick Coating": "Yes", "Is Dishwasher Safe": "Yes", "Manufacturer": "Proscenic", "Country of Origin": "India", "Item model number": "T22", "Package Dimensions": "40.7 x 37.5 x 33.4 cm; 5.41 Kilograms", "ASIN": "B08Z6WWMCB"}
         # bb = ["Multi Function : Broil , Roast , Bake , Grill , Fry", "Healthy Cooking : No Oil , No Fat , No Burn Flavor", "Perfect & Even Cooking", "Fast & Efficient Cooling.", "Save energy upto 60%"]
         for k,v in product_json.items():
-            print(k,v)
+
             if (v == 'Not Available') | (v == 'NULL') | (v == 'not available'):
-                for group_name, feature_list in init_feature_group.items():
+                for group_name, feature_list in self.init_feature_group.items():
+
                     if k in feature_list:
                         feature_list.remove(k)
-                        init_feature_group[group_name] = feature_list
+                        self.init_feature_group[group_name] = feature_list
                     else:
                         continue
             else:
                 continue
 
-
-        for group_name, feature_list in init_feature_group.copy().items():
+        for group_name, feature_list in self.init_feature_group.copy().items():
             if len(feature_list) == 0:
-                del init_feature_group[group_name]
+                del self.init_feature_group[group_name]
 
-        del init_feature_group['others']
-        print(init_feature_group)
-        return init_feature_group
+        del self.init_feature_group['others']
+        print(self.init_feature_group)
+        return self.init_feature_group,product_json
 
 
 

@@ -96,19 +96,12 @@ class Search_Match():
                 return exact_match
 
 
-    # def match_product_type(self,product_type):
-    #     all_product_name = self.get_all_product_name()
-    #     best_match = process.extract(product_type, all_product_name,limit=999)
-    #
-    #     # 输出最匹配的字符串和匹配分数
-    #     print("Best Match:", best_match)
-    #     print("Best Match Length:", len(best_match))
-    #     return best_match
 
 if __name__ == '__main__':
 
     from modelservice.database.dataset import Dateset
     from modelservice.feature_engineering.feature_extraction import Feature_Engineering
+    from modelservice.product_text_generation_engineering.generation_text import Genertion_Text
 
     sentence = "I'd like to buy a red PHILIPS fryer that has 3.2 litres and mades by plastic and the maximum energy consumption is two thousand wattage.I can use it to roast, broil and steam. In addition the product cannot be sold for more than 3000 rupee and the home kitchen rank is about 23000. Also, it should have the nonstick.Finally, it should be made in China and weight less than six kilograms."
     # sentence = "I'd like to buy a red PHILIPS fryer named PHILIPS Digital Air Fryer that has 3.2 litres and mades by plastic and the maximum energy consumption is two thousand wattage.I can use it to roast, broil and steam. In addition the product cannot be sold for more than 3000 rupee and the home kitchen rank is about 23000. Also, it should have the nonstick.Finally, it should be made in China and weight less than six kilograms."
@@ -128,5 +121,11 @@ if __name__ == '__main__':
         # attention_matrix = sm.create_attention_matrix(feature_json=result,data_num=data_num)
         # best_item = sm.get_attention_item(attention_matrix=attention_matrix)
         best_item = sm.match_product(feature_result=result,data_num=data_num)
-        fe.filter(item_tuple=best_item)
+        feature_group_json,product_json = fe.filter(item_tuple=best_item)
+        print(product_json)
+        gt = Genertion_Text()
+        product_text = gt.generate_product_text(feature_froup_json=feature_group_json, product_json=product_json)
+        print('-----------------------')
+        print(product_text)
+
 
