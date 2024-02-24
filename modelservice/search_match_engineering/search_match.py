@@ -101,7 +101,7 @@ if __name__ == '__main__':
 
     from modelservice.database.dataset import Dateset
     from modelservice.feature_engineering.feature_extraction import Feature_Engineering
-    from modelservice.product_text_generation_engineering.generation_text import Genertion_Text
+    from modelservice.product_text_generation_engineering.llm_generation_text import Genertion_Text
 
     sentence = "I'd like to buy a red PHILIPS fryer that has 3.2 litres and mades by plastic and the maximum energy consumption is two thousand wattage.I can use it to roast, broil and steam. In addition the product cannot be sold for more than 3000 rupee and the home kitchen rank is about 23000. Also, it should have the nonstick.Finally, it should be made in China and weight less than six kilograms."
     # sentence = "I'd like to buy a red PHILIPS fryer named PHILIPS Digital Air Fryer that has 3.2 litres and mades by plastic and the maximum energy consumption is two thousand wattage.I can use it to roast, broil and steam. In addition the product cannot be sold for more than 3000 rupee and the home kitchen rank is about 23000. Also, it should have the nonstick.Finally, it should be made in China and weight less than six kilograms."

@@ -16,35 +16,53 @@ class Genertion_Text(LLM_Model):
     def generate_product_text(self,feature_froup_json,product_json):
         order_list = self.get_order_from_product_json(feature_froup_json=feature_froup_json)
         product_total_text = ''
+        product_name = self.cu.match_product_name(product_name=product_json['product_name'])
         for i,order in enumerate(order_list):
+            try:
+                if i == 0:
+                    paragraph = f'self.dp.paragraph_{order}(is_opening=True,is_closing=False)'
 
-            if i == 0:
-                paragraph = f'self.dp.paragraph_{order}(is_opening=True,is_closing=False)'
+                elif i == len(order_list)-1:
+                    paragraph = f'self.dp.paragraph_{order}(is_opening=False,is_closing=True)'
 
-            elif i == len(order_list)-1:
-                paragraph = f'self.dp.paragraph_{order}(is_opening=False,is_closing=True)'
+                else:
+                    paragraph = f'self.dp.paragraph_{order}(is_opening=False,is_closing=False)'
 
-            else:
-                paragraph = f'self.dp.paragraph_{order}(is_opening=False,is_closing=False)'
-            group_name,group_intro = eval(paragraph)
+                group_name,group_intro = eval(paragraph)
 
-            group_feature_contain = eval(f'self.mp.{group_name}()')
-            # print(group_name,'----',group_intro,'----',group_feature_contain)
-            group_feature_json = {}
-            response_schemas = []
-            for feature in group_feature_contain:
-                group_feature_json[feature]=product_json[feature]
-                schema = ResponseSchema(name=feature, description=self.config.prompt_info()[feature])
-                response_schemas.append(schema)
+                group_feature_contain = eval(f'self.mp.{group_name}()')
+                # print(group_name,'----',group_intro,'----',group_feature_contain)
+                group_feature_json = {}
+                response_schemas = []
+                for feature in group_feature_contain:
+                    group_feature_json[feature]=product_json[feature]
+                    schema = ResponseSchema(name=feature, description=self.config.prompt_info()[feature])
+                    response_schemas.append(schema)
 
-            product_name = product_json['product_name']
-            # print(product_name)
-            paragraph_text_result = self.ollama_generation_one_paragraph(response_schemas=response_schemas,product_name=product_name,
-                                                 paragraph_intro=group_intro,input_json=group_feature_json)
 
-            paragraph_text_result = self.cu.match_text(text=paragraph_text_result) + '\n'
-            print(paragraph_text_result)
-            product_total_text += paragraph_text_result
+                paragraph_text_result = self.ollama_generation_one_paragraph(response_schemas=response_schemas,product_name=product_name,
+                                                     paragraph_intro=group_intro,input_json=group_feature_json)
+
+                paragraph_text_result = self.cu.match_text(text=paragraph_text_result)
+                print(paragraph_text_result)
+                product_total_text += paragraph_text_result
+            except Exception as e:
+                print(f'Exception occured {e}')
+                continue
+        try:
+            paragraph_7 = eval(f'self.mp.{self.dp.paragraph_7()}()')
+            paragraph_7_data = eval(product_json[paragraph_7[0]])
+
+            product_total_text += f"Let's review this {product_name}:\n"
+            for sentence in paragraph_7_data:
+                sentence_new = f' -|->  {sentence}\n'
+                print(sentence_new)
+                product_total_text += sentence_new
+        except Exception as e:
+            pass
+
+        if product_total_text == '':
+            raise Exception('Product introduction is empty.')
 
         return product_total_text
 

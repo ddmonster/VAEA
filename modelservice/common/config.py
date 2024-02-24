@@ -3,10 +3,17 @@ import os.path
 
 class Config():
     def __init__(self):
-        pass
+        self.current_path = os.path.abspath(__file__)
+        self.parent_directory = os.path.dirname(self.current_path)
+        self.grand_parent_directory = os.path.dirname(self.parent_directory)
+
+    def chart_html_folder_path(self):
+        folder_path = os.path.join(os.path.join(self.grand_parent_directory, 'chart'),'chart_html')
+        return folder_path
 
     def db_folder_path(self):
-        return r'C:\Users\Johnson-ITX\Desktop\VAEA\modelservice\database'
+        folder_path = os.path.join(self.grand_parent_directory,'database')
+        return folder_path
 
     def db_name(self):
         return 'amazon_data.db'
@@ -47,7 +54,6 @@ class Config():
             "Max_Temperature_Setting":"This is the maximum allowable temperature setting for the product.",
             "Special_Feature":"This is the special feature of the product",
             "description":"This is a summary of the product's features"
-
         }
         return info
 

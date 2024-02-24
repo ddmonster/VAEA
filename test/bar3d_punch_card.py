@@ -36,7 +36,7 @@ hours = [
     "10p",
     "11p",
 ]
-days = ["Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday", "Sunday"]
+days = ["品牌1", "品牌2", "品牌3", "品牌4", "品牌5", "品牌6", "品牌7"]
 
 data = [
     [0, 0, 5],
@@ -216,9 +216,10 @@ data = [[d[1], d[0], d[2]] for d in data]
     .add(
         series_name="",
         data=data,
-        xaxis3d_opts=opts.Axis3DOpts(type_="category", data=hours),
-        yaxis3d_opts=opts.Axis3DOpts(type_="category", data=days),
-        zaxis3d_opts=opts.Axis3DOpts(type_="value"),
+        xaxis3d_opts=opts.Axis3DOpts(type_="category", data=hours,name = '价格区间（卢比）'),
+        yaxis3d_opts=opts.Axis3DOpts(type_="category", data=days, name='品牌'),
+        zaxis3d_opts=opts.Axis3DOpts(type_="value",name='售价（卢比）'),
+        shading='realistic'
     )
     .set_global_opts(
         visualmap_opts=opts.VisualMapOpts(
@@ -238,5 +239,5 @@ data = [[d[1], d[0], d[2]] for d in data]
             ],
         )
     )
-    .render("../modelservice/chart/bar3d_punch_card.html")
+    .render(r"C:\Users\Johnson-ITX\Desktop\VAEA\modelservice\chart\chart_html/bar3d_punch_card.html")
 )

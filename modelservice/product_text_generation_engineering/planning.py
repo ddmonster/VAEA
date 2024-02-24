@@ -47,17 +47,26 @@ class Documentation_Planning():
         else:
             return 'advanced_functions', 'This text is used to present the advanced functions of the product.'
 
+    # def paragraph_6(self,is_opening=False,is_closing=True):
+    #     if is_opening:
+    #         return 'source', 'This text is the beginning of the article and is used to present the country of origin of the product.'
+    #     elif is_closing:
+    #         return 'source', 'This text is the ending of the article and is used to present the country of origin of the product.'
+    #     else:
+    #         return 'source', 'This text is used to present the country of origin of the product.'
+
     def paragraph_6(self,is_opening=False,is_closing=True):
         if is_opening:
-            return 'source', 'This text is the beginning of the article and is used to present the country of origin of the product.'
+            return 'summary', 'This text is the beginning of the article and is used to present the summary of the product.'
         elif is_closing:
-            return 'source', 'This text is the ending of the article and is used to present the country of origin of the product.'
+            return 'summary', 'This text is the ending of the article and is used to summary of origin of the product.'
         else:
-            return 'source', 'This text is used to present the country of origin of the product.'
+            return 'summary', 'This text is used to present the summary of the product.'
 
     def paragraph_7(self):
         return 'description'
 
+# a=  ["HEALTHY FRYING: This appliance uses air crisp technology to cook healthy-low fat versions of your favorite foods,using little to no oil. Deliver a much healthier version of the same food with great crispy fried taste and texture", "EFFORTLESS COOKING: Prepare amazing meals from your cookbook such as french fries,chicken,steak,pudding and donuts.Make yourself feel like a professional chef in your kitchen with this air fryer that will replace any one of your kitchen appliances", "FAST & EFFICIENT HEATING: With 1000W of power, this air fryer heats up in 2-3 minutes and cooks food faster than a conventional oven so you can save money at the same time as cutting down the calories", "DIGITAL TEMPERATURE & TIME CONTROL: With digital touch control panel,simply insert food into the hot air fryer,set the time and temperature and cook your ingredients efficiently.Cook-up casseroles, beef, chicken breasts and even desserts", "SELECTIONS AT A TOUCH: Easy to use 8 Preset Menu that do all the cooking math for you. Just choose your preset with 1 easy tap on the display and you"re ready to cook. You can also set cooking temp/time as per your convenience."]
 
 #规划种类内部的优先级（句子优先级）
 class Micro_Planning():
@@ -80,8 +89,10 @@ class Micro_Planning():
     def advanced_functions(self):
         return ['Has_Nonstick_Coating', 'Max_Temperature_Setting', 'Control_Method', 'Special_Feature','Recommended_Uses_For_Product']
 
-    def source(self):
-        return ['country_of_origin']
+    # def source(self):
+    #     return ['country_of_origin']
+    def summary(self):
+        return ['country_of_origin','description']
 
     def description(self):
         return ['description']

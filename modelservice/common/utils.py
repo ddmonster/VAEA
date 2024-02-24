@@ -5,6 +5,7 @@ import sys
 import datetime
 import re
 import json
+import random
 from modelservice.common.config import Config
 
 
@@ -45,11 +46,58 @@ class Common_Utils():
 
         if match:
             matched_content = match.group(1)
-            print("Matched Content")
-            return matched_content
+            # print("Matched Content")
+            pattern = r'\{.*\}'
+            match = re.search(pattern, matched_content, re.DOTALL)
+            if match:
+                print("Match content is JSON.")
+                return ''
+            else:
+                return matched_content+ '\n'
         else:
-            print("No match found.")
-            return text
+            print("No match content found.")
+            return ''
+
+    def match_product_name(self,product_name):
+        pattern = re.compile(r".*?(?=Fryer)", re.IGNORECASE)
+        match = pattern.match(product_name)
+
+        if match:
+            matched_text = match.group(0)
+            return matched_text+ "Fryer"
+
+        else:
+            print("No match product name found.")
+            return 'Fryer'
+
+class Rule_Bsed_Language_Util():
+    def __init__(self):
+        pass
+    def random_choose(self,choose_list):
+        return choose_list[random.randint(0,len(choose_list)-1)]
+
+    def split_list_2_language(self,words_list):
+        language = ''
+        for i,word in enumerate(words_list):
+            if len(words_list) == 1:
+                language += word
+
+            elif len(words_list) == 2:
+                if i == 0:
+                    language += f'{word} and '
+                else:
+                    language += f'{word}'
+            else:
+                if i <= len(words_list)-3:
+                    language += f'{word}, '
+
+                elif i == len(words_list)-2:
+                    language += f'{word} and '
+
+                elif i == len(words_list)-1:
+                    language += f'{word}'
+        return language
+
 
 class Data_Base_Util(Config):
     def __init__(self):
@@ -229,6 +277,14 @@ class Data_Base_Util(Config):
         else:
             return [is_success, return_value]
 
+    def get_columnB_from_columnA(self,db,table_name,columnB_name,columnA_name,columnA_value):
+        is_success, return_value = self.run_sql(db,
+                                                cmd_list=[f'''SELECT {columnB_name} FROM {table_name} WHERE {columnA_name}="{columnA_value}"'''])
+        if not is_success:
+            return None
+
+        else:
+            return [is_success, return_value]
 
 if __name__ == '__main__':
 

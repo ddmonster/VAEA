@@ -28,18 +28,33 @@
 # # element_ranks现在包含每个元素在原数组中的排名
 # print("Element Ranks:", element_ranks)
 # print(np.random.rand())
-
+import os.path
+#
+# import re
+#
+# text ="```jsonIntroducing the Prestige Electric Air Fryer PAF 6.0 - the perfect kitchen companion for roasting and baking enthusiasts! With its sleek black design and innovative technology, this air fryer allows you to cook a variety of dishes to perfection, all while using less oil than traditional deep-frying methods. Get ready to enjoy crispy roasted vegetables, juicy chicken, and delectable baked goods with the touch of a button. Upgrade your kitchen game with the Prestige Electric Air Fryer PAF 6.0!```"
+#
+# pattern = re.compile(r"```json(.*?)```", re.DOTALL)
+# match = pattern.search(text)
+#
+# if match:
+#     matched_content = match.group(1)
+#     print("Matched Content:")
+#     print(matched_content)
+# else:
+#     print("No match found.")
 
 import re
 
-text ="```jsonIntroducing the Prestige Electric Air Fryer PAF 6.0 - the perfect kitchen companion for roasting and baking enthusiasts! With its sleek black design and innovative technology, this air fryer allows you to cook a variety of dishes to perfection, all while using less oil than traditional deep-frying methods. Get ready to enjoy crispy roasted vegetables, juicy chicken, and delectable baked goods with the touch of a button. Upgrade your kitchen game with the Prestige Electric Air Fryer PAF 6.0!```"
+text = "Aria Air Fryrs AAO-890 Oven Air fryer, 10Qt, Premium Black"
 
-pattern = re.compile(r"```json(.*?)```", re.DOTALL)
-match = pattern.search(text)
+# 使用正则表达式匹配 "Fryer" 前面的所有字符，不区分大小写
+pattern = re.compile(r".*?(?=Fryer)", re.IGNORECASE)
+match = pattern.match(text)
 
 if match:
-    matched_content = match.group(1)
-    print("Matched Content:")
-    print(matched_content)
+    matched_text = match.group(0)
+    print("Matched Text:", matched_text)
 else:
     print("No match found.")
+

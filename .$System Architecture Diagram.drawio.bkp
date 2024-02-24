@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-02-25T21:17:11.209Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/23.1.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="PxBTj-DNANtP5h7Eo571" version="23.1.5" type="device">
+<mxfile host="Electron" modified="2024-02-25T09:12:01.103Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/23.1.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="R8BSQvv8IAIuX3ys-6tp" version="23.1.5" type="device">
   <diagram name="第 1 页" id="-PWBbvEQKRFpdX3cdJ4J">
-    <mxGraphModel dx="1539" dy="827" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1553" dy="689" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -73,17 +73,8 @@
         <mxCell id="OTL51iOK556OMJYErmxO-40" value="&lt;h1&gt;特征工程&lt;/h1&gt;&lt;p&gt;1. 从给定句子里提炼产品特征词。这些词可能包括产品特征类型，产品特征值，组成json&lt;/p&gt;&lt;p&gt;2. 从json中，键与数据库中的列名匹配。然后值匹配，给出所有匹配的行&lt;/p&gt;&lt;p&gt;3. 行筛选，选择最可能的一个产品&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;" style="text;html=1;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="-140" y="550" width="190" height="240" as="geometry" />
         </mxCell>
-        <mxCell id="xX7CFxqWYa-lZe74Ix8_-1" value="&lt;h1&gt;搜索与匹配&lt;/h1&gt;&lt;p&gt;Fuzzy matching greedy strategy based on attention matrix and adaptive attention hierarchical features&lt;br&gt;&lt;/p&gt;" style="text;html=1;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" parent="1" vertex="1">
+        <mxCell id="xX7CFxqWYa-lZe74Ix8_-1" value="&lt;h1&gt;搜索与匹配&lt;/h1&gt;&lt;p&gt;Fuzzy matching greedy strategy based on attention matrix and adaptive attention hierarchical features&lt;br&gt;&lt;/p&gt;" style="text;html=1;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="-120" y="300" width="190" height="240" as="geometry" />
-        </mxCell>
-        <mxCell id="tgniY6fqGfUPjbvQltDo-1" value="&lt;h1&gt;3D柱形图-流行度分析&lt;/h1&gt;&lt;p&gt;x 星级分段（自适应，0.5分一段）&lt;/p&gt;&lt;p&gt;y 评论数量&amp;nbsp;&lt;/p&gt;&lt;p&gt;z 售价&lt;/p&gt;" style="text;html=1;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="-10" y="20" width="190" height="160" as="geometry" />
-        </mxCell>
-        <mxCell id="tgniY6fqGfUPjbvQltDo-2" value="&lt;h1&gt;2D流动柱形图-流行度分析&lt;/h1&gt;&lt;p&gt;x 主要品牌&lt;/p&gt;&lt;p&gt;y 建议售价，实际售价&lt;/p&gt;&lt;p&gt;w 时间&lt;/p&gt;" style="text;html=1;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="230" y="20" width="190" height="210" as="geometry" />
-        </mxCell>
-        <mxCell id="tgniY6fqGfUPjbvQltDo-3" value="&lt;h1&gt;世界地图&lt;/h1&gt;&lt;p&gt;x 产地分类&lt;/p&gt;&lt;p&gt;y 各产地数量&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;" style="text;html=1;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="447" y="10" width="190" height="210" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
