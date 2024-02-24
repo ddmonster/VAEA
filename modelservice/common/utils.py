@@ -39,6 +39,18 @@ class Common_Utils():
 
         return product_json
 
+    def match_text(self,text):
+        pattern = re.compile(r"```json(.*?)```", re.DOTALL)
+        match = pattern.search(text)
+
+        if match:
+            matched_content = match.group(1)
+            print("Matched Content")
+            return matched_content
+        else:
+            print("No match found.")
+            return text
+
 class Data_Base_Util(Config):
     def __init__(self):
         super().__init__()
@@ -231,9 +243,11 @@ if __name__ == '__main__':
 
 
     cu = Common_Utils()
-    tuple_string = ('B08B3M4GMX', '3/1/2023', 'https://www.amazon.in/Philips-HD9216-43-Fryer-Retractable/dp/B08B3M4GMX', 'PHILIPS Air Fryer - India’s No.1 Air Fryer Brand, With Rapid Air Technology, Uses up to 90% less fat, 1425W, 4.1 Liter, (Grey) (HD9216/43)', 'PHILIPS', '4.3', '335', '10495', '6680', 'Grey', '2 litres', '1400.0', 'Not Available', '10548', '16', '{"Special Feature": "Manual", "Product Dimensions": "28.7D x 31.5W x 38.4H Centimeters", "Colour": "Grey", "Capacity": "2 litres", "Material": "Plastic", "Recommended Uses For Product": "Roast, Bake", "Item Weight": "8.56 Kilograms", "Brand": "PHILIPS", "Wattage": "1400 Watts", "Voltage": "220 Volts", "Control Method": "App", "Model Name": "HD9216/43", "Has Nonstick Coating": "Yes", "Min Temperature Setting": "40 Degrees Fahrenheit", "Manufacturer": "Philips", "Item model number": "HD9216/43", "ASIN": "B08B3M4GMX"}', '["Philips is India’s No.1 Airfryer brand (Source: Euromonitor International Limited; Consumer Appliances 2021ED)", "PHILIPS Air Fryer HD9216/43 uses up to 80% less fat, Air Fry, Roast, Bake, Grill, Reheat, 1400W, with dishwasher safe 4.1 Liter basket, Patented Rapid Air Technology, Starfish design, 360 °even frying, Black", "GUILT-FREE FOOD WITH 90% LESS OIL: With PATENTED RAPID AIR TECHNOLOGY Philips Air Fryer delivers all the crunch and tenderness of deep-frying with 90% less oil.", "TECHNOLOGY: Patented Rapid Air technology with unique starfish design pan ensures evenly fried results without flipping the food.; SMART ALL-IN-1 FUNCTIONALITY: Fry. Bake. Grill. Roast. And even reheat!", "EASE OF USE: Extra-long 1.8 m cord length for easy placement in your kitchen. 30 minutes timer with auto off. Wide temperature control from 80°C to 200 °C.", "NUTRIU APP: Get 200+ Indian and global recipes and some from celebrity Chef Ranveer Brar by downloading free NutriU App (IOS & Android).", "RECIPES MADE EASY: Make paneer or chicken tikka, pizza, grilled vegetables, Samosas, Kabab/Cutlet, Chicken Nuggets, Cakes/muffins and much more at touch of a button."]', 'B08B3M4GMX', '2.0', '8.56 Kilograms', 'Yes', 'Plastic', 'Philips', 'App', 'HD9216/43', 'Roast, Bake', 'Manual', 'not available', 'not available')
-
-    cu.tuple_2_json(tuple_string=tuple_string)
+    text = "```jsonIntroducing the PHILIPS Air Fryer - India’s No.1 Air Fryer Brand, With Rapid Air Technology, Uses up to 90% less fat, 1425W, 4.1 Liter, (Grey) (HD9216/43). A healthier and tastier way to fry your favorite foods, with up to 90% less fat. Rapid Air Technology circulates hot air for crispy results. Easy to use and clean, this air fryer is a game-changer for home cooking. Get yours today!```"
+    cu.match_text(text=text)
+    # tuple_string = ('B08B3M4GMX', '3/1/2023', 'https://www.amazon.in/Philips-HD9216-43-Fryer-Retractable/dp/B08B3M4GMX', 'PHILIPS Air Fryer - India’s No.1 Air Fryer Brand, With Rapid Air Technology, Uses up to 90% less fat, 1425W, 4.1 Liter, (Grey) (HD9216/43)', 'PHILIPS', '4.3', '335', '10495', '6680', 'Grey', '2 litres', '1400.0', 'Not Available', '10548', '16', '{"Special Feature": "Manual", "Product Dimensions": "28.7D x 31.5W x 38.4H Centimeters", "Colour": "Grey", "Capacity": "2 litres", "Material": "Plastic", "Recommended Uses For Product": "Roast, Bake", "Item Weight": "8.56 Kilograms", "Brand": "PHILIPS", "Wattage": "1400 Watts", "Voltage": "220 Volts", "Control Method": "App", "Model Name": "HD9216/43", "Has Nonstick Coating": "Yes", "Min Temperature Setting": "40 Degrees Fahrenheit", "Manufacturer": "Philips", "Item model number": "HD9216/43", "ASIN": "B08B3M4GMX"}', '["Philips is India’s No.1 Airfryer brand (Source: Euromonitor International Limited; Consumer Appliances 2021ED)", "PHILIPS Air Fryer HD9216/43 uses up to 80% less fat, Air Fry, Roast, Bake, Grill, Reheat, 1400W, with dishwasher safe 4.1 Liter basket, Patented Rapid Air Technology, Starfish design, 360 °even frying, Black", "GUILT-FREE FOOD WITH 90% LESS OIL: With PATENTED RAPID AIR TECHNOLOGY Philips Air Fryer delivers all the crunch and tenderness of deep-frying with 90% less oil.", "TECHNOLOGY: Patented Rapid Air technology with unique starfish design pan ensures evenly fried results without flipping the food.; SMART ALL-IN-1 FUNCTIONALITY: Fry. Bake. Grill. Roast. And even reheat!", "EASE OF USE: Extra-long 1.8 m cord length for easy placement in your kitchen. 30 minutes timer with auto off. Wide temperature control from 80°C to 200 °C.", "NUTRIU APP: Get 200+ Indian and global recipes and some from celebrity Chef Ranveer Brar by downloading free NutriU App (IOS & Android).", "RECIPES MADE EASY: Make paneer or chicken tikka, pizza, grilled vegetables, Samosas, Kabab/Cutlet, Chicken Nuggets, Cakes/muffins and much more at touch of a button."]', 'B08B3M4GMX', '2.0', '8.56 Kilograms', 'Yes', 'Plastic', 'Philips', 'App', 'HD9216/43', 'Roast, Bake', 'Manual', 'not available', 'not available')
+    #
+    # cu.tuple_2_json(tuple_string=tuple_string)
     # result = dbu.select_data_within_kv(db = dbu.db_path(),table_name=dbu.table_name(),kv = {'product_name':'SKY LINE VTL-5424 2000-Watt Deep Fryer (Multicolour)'})
     # print(result)
     # result = dbu.get_data_num(db = dbu.db_path(),table_name=dbu.table_name())

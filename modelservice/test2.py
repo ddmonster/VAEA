@@ -129,7 +129,40 @@ class Ollama_test():
         prompt = PromptTemplate(input_variables=["user_input"], template=template,
                                 partial_variables={"format_instructions": format_instructions})
         promptValue = prompt.format(user_input="I'd like to buy a red PHILIPS fryer that has 3.2 litres and mades by plastic and the maximum energy consumption is two thousand wattage.I can use it to roast, broil and steam. In addition the product cannot be sold for more than 3000 rupee and the home kitchen rank is about 23000. Also, it should have the nonstick.Finally, it should be made in China and weight less than six kilograms.")
+        print(promptValue)
+        result = self.llm(promptValue)
 
+        return result
+
+
+    def ollama_json3(self):
+        response_schemas = [
+            ResponseSchema(name="product_name", description="This is the name of the product"),
+            ResponseSchema(name="brand", description="This is the brand of the product"),
+            ResponseSchema(name="Manufacturer", description="This is the Manufacturer of the product"),
+            ResponseSchema(name="Colour", description="This is the colour of the product"),
+            ResponseSchema(name="Recommended_Users_For_Product", description="This is what the product is used for"),
+        ]
+        oup_parser = StructuredOutputParser.from_response_schemas(response_schemas)
+        format_instructions = oup_parser.get_format_instructions()
+
+        template = """
+           You are a professional product introduction [xxx] that will generate a text introducing a fryer product based on json data entered by the user. This text is the beginning of the article and is used to introduce basic information about the product. This paragraph should be attractive and relevant to the user. In addition, the paragraph should be limited to about 50 words.
+
+           {format_instructions}
+
+           %user input：
+           {user_input}
+
+           your output：
+           """
+        template = template.replace("[xxx]","bot")
+        print(template)
+        input_json = {'product_name':'Prestige Electric Air Fryer PAF 6.0','brand':'Prestige','Manufacturer':'TTK Prestige Ltd','Colour':'Black','Recommended_Users_For_Product':'Roast, Bake'}
+        prompt = PromptTemplate(input_variables=["user_input"], template=template,
+                                partial_variables={"format_instructions": format_instructions})
+        promptValue = prompt.format(user_input=f"{input_json}")
+        print(promptValue)
         result = self.llm(promptValue)
 
         return result
@@ -137,22 +170,22 @@ class Ollama_test():
     def ollama_chain(self):
         #第一个任务
         template = """
-        您的工作是根据用户建议的区域制作一道经典菜谱。
-        %用户位置
+        Your job is to give a classic dish based on a user-suggested region.
+        %User location
         {user_location}
         
-        AI回答：
+        Your answer：
         """
         prompt_template = PromptTemplate(input_variables = ["user_location"],template=template)
         location_chain=LLMChain(llm=self.llm,prompt=prompt_template)
 
         #第二个任务
         template = """
-        给出一个简短的食谱，说明如何在家做这道菜
-        %菜谱
+        Give a short recipe on how to make this dish at home
+        %Recipe
         {user_meal}
         
-        AI回答
+        Your answer:
         """
         prompt_template = PromptTemplate(input_variables = ["user_meal"],template=template)
         meal_chain=LLMChain(llm=self.llm,prompt=prompt_template)
@@ -160,7 +193,7 @@ class Ollama_test():
 
         #两个任务连在一起
         overall_chain=SimpleSequentialChain(chains=[location_chain,meal_chain],verbose=True)
-        review = overall_chain.run('广东广州')
+        review = overall_chain.run('London')
         print(review)
 
     def ollama_agent(self):
@@ -221,25 +254,40 @@ if __name__ == '__main__':
     # ollama.ollama_summary()
     import re,json
     ollama = Ollama_test()
-    result = ollama.ollama_json2()
+    result = ollama.ollama_json3()
+    print(result)
+    pattern = re.compile(r"```json(.*?)```", re.DOTALL)
+    match = pattern.search(result)
 
-
-
-    # 使用正则表达式匹配JSON数据
-    pattern = r'\{.*\}'
-    match = re.search(pattern, result, re.DOTALL)
     if match:
-        json_data = match.group()
-        try:
-            json_data = json.loads(json_data)
-            print(json_data)  # 打印格式化后的JSON数据
-        except json.JSONDecodeError as e:
-            Exception(f"Error decoding JSON: {e}")
+        matched_content = match.group(1)
+        print("Matched Content:")
+        print(matched_content)
     else:
-        print("No JSON data found.")
+        print("No match found.")
+
+    # new=result.replace("```json","")
+    # print('')
+    # print(new)
+
+    #
+    #
+    #
+    # # 使用正则表达式匹配JSON数据
+    # pattern = r'\{.*\}'
+    # match = re.search(pattern, result, re.DOTALL)
+    # if match:
+    #     json_data = match.group()
+    #     try:
+    #         json_data = json.loads(json_data)
+    #         print(json_data)  # 打印格式化后的JSON数据
+    #     except json.JSONDecodeError as e:
+    #         Exception(f"Error decoding JSON: {e}")
+    # else:
+    #     print("No JSON data found.")
 
     # ollama.ollama_chain()
     # ollama.ollama_prompt2()
     # ollama.ollama_prompt1('广东深圳')
-    # ollama.ollama_langchain()
+    # ollama.ollama_langchain(sentence="You are a professional product presenter, rank the following features from highest to lowest level of interest based on how interested the customer is in the features: ['product_name', 'brand', 'Model_Name']")
     # ollama_langchain_stream()
