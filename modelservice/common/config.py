@@ -17,6 +17,9 @@ class Config():
     def db_path(self):
         return os.path.join(self.db_folder_path(), self.db_name())
 
+    def image_folder_path(self):
+        return os.path.join(self.db_folder_path(),'images')
+
     def model_name(self):
         return "llama2:70b"
 

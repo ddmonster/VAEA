@@ -22,7 +22,6 @@ class Search_Match():
             match, score = process.extractOne(feature_value, [product])
             score_list.append(score)
 
-        print(score_list)
         return np.asarray(score_list)
 
 
@@ -30,7 +29,6 @@ class Search_Match():
         i = 0
         init_matrix = np.full((data_num, 15), -1)
         for k,v in feature_json.items():
-            print(k,v)
             if ((v is None)|(v=='')):
                 i+=1
                 continue
@@ -56,7 +54,6 @@ class Search_Match():
         feature_weight = self.get_feature_weights(matrix=attention_matrix)
         row_sums = np.average(attention_matrix, axis=1, weights=feature_weight)
         max_attention_index = np.argmax(row_sums)
-        print(max_attention_index)
         result = self.dbu.get_a_row(db=self.dbu.db_path(),table_name=self.dbu.table_name(),row_num=max_attention_index)
         if result is None:
             raise Exception('Get most attention item failed')
@@ -123,9 +120,13 @@ if __name__ == '__main__':
     fe = Feature_Engineering()
     result = fe.extraction(sentence=sentence)
     #要开发一个产品名精准匹配，如果匹配到了直接输出结果不用进入搜索匹配算法
-
-    sm=Search_Match()
-    # attention_matrix = sm.create_attention_matrix(feature_json=result,data_num=data_num)
-    # best_item = sm.get_attention_item(attention_matrix=attention_matrix)
-    best_item = sm.match_product(feature_result=result,data_num=data_num)
+    if (result is None) | (result == 'None'):
+        feedback = f'Feature json is {result}. Cannot find any feature, please try again'
+        print(feedback)
+    else:
+        sm=Search_Match()
+        # attention_matrix = sm.create_attention_matrix(feature_json=result,data_num=data_num)
+        # best_item = sm.get_attention_item(attention_matrix=attention_matrix)
+        best_item = sm.match_product(feature_result=result,data_num=data_num)
+        fe.filter(item_tuple=best_item)
 
