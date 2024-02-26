@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+        const recognition = new webkitSpeechRecognition();
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0].transcript;
+            document.getElementById("output").innerHTML = "Speech recognition: " + transcript;
+        };
+
+        function startSpeaking() {
+            recognition.start();
+            recognition.speak("Hello, world!");
+        }
+
+        function stopSpeaking() {
+            recognition.stop();
+        }
+    </script>
+</head>
+
+<body>
+    <div id="output"></div>
+    <button onclick="startSpeaking()">Start Speaking</button>
+    <button onclick="stopSpeaking()">Stop Speaking</button>
+</body>
+
+</html>
