@@ -120,8 +120,7 @@ class Data_Base_Util(Config):
             for cmd in cmd_list:
                 cursor = c.execute(cmd)
                 return_value = []
-                # value = cursor.fetchall()
-                # print(value)
+
                 for row in cursor:
                     return_value.append(row)
 
@@ -231,6 +230,22 @@ class Data_Base_Util(Config):
 
         is_success, return_value = self.run_sql(db,
                                                 cmd_list=[f'''SELECT * FROM {table_name} WHERE {kv_body[:-5]}'''])
+        if not is_success:
+            # 待增加失败后的操作
+            return None
+
+        else:
+            return [is_success, return_value]
+
+    def select_column_data_within_kv(self,db,table_name,column_name,kv):
+
+        kv_body = ''
+
+        for k, v in kv.items():
+            kv_body += f'{k}="{v}" AND '
+
+        is_success, return_value = self.run_sql(db,
+                                                cmd_list=[f'''SELECT {column_name} FROM {table_name} WHERE {kv_body[:-5]}'''])
         if not is_success:
             # 待增加失败后的操作
             return None

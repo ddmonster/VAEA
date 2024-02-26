@@ -209,16 +209,16 @@ data = [
     [6, 23, 6],
 ]
 data = [[d[1], d[0], d[2]] for d in data]
-
+print(data)
 
 (
     Bar3D()
     .add(
         series_name="",
         data=data,
-        xaxis3d_opts=opts.Axis3DOpts(type_="category", data=hours,name = '价格区间（卢比）'),
+        xaxis3d_opts=opts.Axis3DOpts(type_="category", data=hours,name = '星级'),
         yaxis3d_opts=opts.Axis3DOpts(type_="category", data=days, name='品牌'),
-        zaxis3d_opts=opts.Axis3DOpts(type_="value",name='售价（卢比）'),
+        zaxis3d_opts=opts.Axis3DOpts(type_="value",name='平均售价（卢比）'),
         shading='realistic'
     )
     .set_global_opts(
