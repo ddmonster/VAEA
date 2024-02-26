@@ -1,8 +1,10 @@
 import os.path
 import numpy as np
+import copy
 from pyecharts import options as opts
 from pyecharts.charts import Map
 from pyecharts.charts import Bar3D
+from pyecharts.charts import Timeline, Bar, Pie
 
 from modelservice.common.config import Config
 from modelservice.common.utils import Data_Base_Util
@@ -73,6 +75,73 @@ class Dashboard_Chart(Config):
         )
         return html_path,y_scale_data,x_scale_data,z_data
 
+
+
+    def flow_analysis(self):
+        brands_list = self.da.get_flow_x_scale()
+        date_list = self.da.get_flow_date(brands_list=brands_list)
+        result = self.da.get_flow_sale_price_mrp(brands_list=brands_list,date_list=date_list)
+        if result is None:
+            return None
+
+        else:
+            sale_price_total_dic,mrp_total_dic = result
+            timeline = Timeline()
+            for date in date_list:
+                # timeline.add()
+                timeline.add(self.get_date_overlap_chart(date=date,brands_list=brands_list,sale_price_total_dic=sale_price_total_dic,mrp_total_dic=mrp_total_dic), time_point=str(date))
+
+            html_path = os.path.join(self.chart_html_folder_path(), 'flow_date.html')
+            timeline.add_schema(is_auto_play=True, play_interval=1800)
+            timeline.render(html_path)
+            return html_path
+
+    def get_date_overlap_chart(self,date,brands_list,sale_price_total_dic,mrp_total_dic) -> Bar:
+        bar = (
+            Bar()
+            .add_xaxis(xaxis_data=brands_list)
+            .add_yaxis(
+                series_name="Sale Price",
+                y_axis=sale_price_total_dic[date],
+                label_opts=opts.LabelOpts(is_show=True),
+            )
+            .add_yaxis(
+                series_name="MRP",
+                y_axis=mrp_total_dic[date],
+                label_opts=opts.LabelOpts(is_show=True),
+            )
+
+            .set_global_opts(
+                title_opts=opts.TitleOpts(
+                    title="{} - Fryers Price Indicator".format(date), subtitle="Data from Amazon India"
+                ),
+                tooltip_opts=opts.TooltipOpts(
+                    is_show=True, trigger="axis", axis_pointer_type="shadow"
+                ),
+                legend_opts=opts.LegendOpts(
+                    selected_map={
+                        "Sale Price": True,
+                        "Suggested Retail Price": True,
+                    }
+                ),
+            )
+        )
+        pie = (
+            Pie()
+            .add(
+                series_name="MRP vs Sale Price",
+                data_pair=[
+                    ["MRP", mrp_total_dic["{}sum".format(date)]],
+                    ["Sale Price", sale_price_total_dic["{}sum".format(date)]],
+                ],
+                center=["80%", "27%"],
+                radius="28%",
+            )
+            .set_series_opts(tooltip_opts=opts.TooltipOpts(is_show=True, trigger="item"))
+        )
+        return bar.overlap(pie)
+
+
 class Dashboard_Analysis():
     def __init__(self):
         self.dbu = Data_Base_Util()
@@ -125,10 +194,12 @@ class Dashboard_Analysis():
         result = self.dbu.select_data_within_column(db= self.dbu.db_path(),table_name=self.dbu.table_name(),column_name='brand')
         if result is None:
             return None
+
         else:
             brands = result[1]
             if len(brands) == 0:
                 return None
+
             else:
                 brands = [x[0] for x in brands ]
 
@@ -142,7 +213,7 @@ class Dashboard_Analysis():
                 brands_dict_descending = dict(sorted(brands_dict.items(), key=lambda item: item[1], reverse=True))
 
                 if len(brands_dict_descending) >= rank_num:
-                    y_scale_data = list(brands_dict_descending.keys())[:7]
+                    y_scale_data = list(brands_dict_descending.keys())[:rank_num]
 
                 else:
                     y_scale_data = list(brands_dict_descending.keys())
@@ -154,16 +225,19 @@ class Dashboard_Analysis():
                                                     column_name='star_rating')
         if result is None:
             return None
+
         else:
             ratings = result[1]
             if len(ratings) == 0:
                 return None
+
             else:
 
                 filter_ratings = []
                 for x in ratings:
                     if 'No' not in x[0]:
                         filter_ratings.append(float(x[0]))
+
                 if len(filter_ratings) == 0:
                     return None
 
@@ -196,8 +270,142 @@ class Dashboard_Analysis():
                         mean_price = int(np.mean([int(x[0]) for x in result[1]]))
                         z_data.append([i, j, mean_price])
 
-            print(z_data)
             return z_data
+
+    def get_flow_x_scale(self,rank_num=10):
+        result = self.dbu.select_data_within_column(db=self.dbu.db_path(), table_name=self.dbu.table_name(),
+                                                    column_name='brand')
+        if result is None:
+            return None
+        else:
+            brands = result[1]
+            if len(brands) == 0:
+                return None
+
+            else:
+                brands = [x[0] for x in brands]
+                brands_set = set(brands)
+                brands_dict = {}
+
+                for brand in brands_set:
+                    num = brands.count(brand)
+                    brands_dict[brand] = num
+
+                brands_dict_descending = dict(sorted(brands_dict.items(), key=lambda item: item[1], reverse=True))
+
+                if len(brands_dict_descending) >= rank_num:
+                    x_scale_data = list(brands_dict_descending.keys())[:rank_num]
+
+                else:
+                    x_scale_data = list(brands_dict_descending.keys())
+
+                return x_scale_data
+
+    def get_flow_date(self,brands_list):
+
+        dates_list = []
+
+        for brand in brands_list:
+            result = self.dbu.get_columnB_from_columnA(db=self.dbu.db_path(), table_name=self.dbu.table_name(),
+                                                       columnB_name='date',columnA_name='brand',columnA_value=brand)
+
+            if result is None:
+                continue
+
+            else:
+                dates = result[1]
+                if len(dates) == 0:
+                    continue
+
+                else:
+                    dates = [x[0] for x in dates]
+                    dates_list += dates
+
+        dates_list = list(set(dates_list))
+        if len(dates_list) == 0:
+            return None
+        dates_list = self.sort_date(date_list=dates_list)
+        return dates_list
+
+    def get_flow_sale_price_mrp(self,brands_list,date_list):
+        sale_price_total_dic ={}
+        mrp_total_dic = {}
+        if (brands_list is None) or (date_list is None):
+            return None
+        for date in date_list:
+            sale_price_date_list = []
+            mrp_date_list = []
+            sale_price_list = []
+            mrp_list = []
+
+            for brand in brands_list:
+                kv = {'brand':brand,'date':date}
+                sale_prices_result = self.dbu.select_column_data_within_kv(db=self.dbu.db_path(), table_name=self.dbu.table_name(),
+                                                               kv=kv,column_name='sale_price')
+
+                mrps_result = self.dbu.select_column_data_within_kv(db=self.dbu.db_path(),
+                                                                           table_name=self.dbu.table_name(),
+                                                                           kv=kv, column_name='mrp')
+                if (sale_prices_result is None) | (mrps_result is None):
+                    continue
+
+                else:
+                    sale_prices = sale_prices_result[1]
+                    mrps = mrps_result[1]
+                    new_sale_prices = []
+                    new_mrps = []
+                    if (len(sale_prices) == 0) | (len(mrps) == 0):
+                        new_sale_prices.append(0)
+                        new_mrps.append(0)
+                        mrp_mean = 0
+                        sale_prices_mean = 0
+
+                    else:
+
+                        for i,price in enumerate(sale_prices.copy()):
+                            if (price[0] == 'Not Available')|(mrps[i][0] == 'Not Available'):
+                                new_sale_prices.append(0)
+                                new_mrps.append(0)
+
+                            else:
+                                new_sale_prices.append(int(price[0]))
+                                new_mrps.append(int(mrps[i][0]))
+
+                        if len(new_sale_prices) ==0:
+                            sale_prices_mean = 0
+
+                        else:
+                            no_zero_new_sale_prices = [x for x in new_sale_prices if x != 0]
+                            sale_prices_mean = int(np.mean(no_zero_new_sale_prices))
+
+                        if len(new_mrps) ==0:
+                            mrp_mean = 0
+
+                        else:
+                            no_zero_new_mrps = [x for x in new_mrps if x != 0]
+                            mrp_mean = int(np.mean(no_zero_new_mrps))
+
+                    mrp_date_dic = {'name': brand,'value':mrp_mean}
+                    sale_price_date_dic = {'name': brand, 'value': sale_prices_mean}
+                    sale_price_date_list.append(sale_price_date_dic)
+                    mrp_date_list.append(mrp_date_dic)
+                    sale_price_list.append(sale_prices_mean)
+                    mrp_list.append(mrp_mean)
+
+            sale_price_total_dic[date] = sale_price_date_list
+            sale_price_total_dic[f'{date}sum'] = sum(sale_price_list)
+            mrp_total_dic[date] = mrp_date_list
+            mrp_total_dic[f'{date}sum'] = sum(mrp_list)
+        print('sale_price_total_dic',sale_price_total_dic)
+        print('mrp_total_dic',mrp_total_dic)
+        return sale_price_total_dic,mrp_total_dic
+
+    def sort_date(self,date_list):
+        from datetime import datetime
+        date_objects = [datetime.strptime(date_str, '%m/%d/%Y') for date_str in date_list]
+        sorted_dates = sorted(date_objects)
+        sorted_dates = [x.strftime('%#m/%#d/%Y') for x in sorted_dates]
+        return sorted_dates
 
 
 
@@ -206,9 +414,14 @@ class Dashboard_Analysis():
 
 if __name__ == '__main__':
     dc = Dashboard_Chart()
-    dc.bard3d_analysis()
+    dc.flow_analysis()
+    # dc.bard3d_analysis()
     # dc.world_map_analysis(brand='PHILIPS')
     # da= Dashboard_Analysis()
+    # da.get_flow_x_scale()
+    # brands_list = da.get_flow_x_scale()
+    # date_list = da.get_flow_date(brands_list=brands_list)
+    # da.get_flow_sale_price_mrp(brands_list=brands_list,date_list=date_list)
     # da.get_map_list('PHILIPS')
     # da.get_bard3d_y_scale()
     # x_scale = da.get_bard3d_x_scale()

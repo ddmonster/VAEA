@@ -2043,6 +2043,7 @@ data_financial = {
 
 
 def format_data(data: dict) -> dict:
+    print(1111,data)
     for year in range(2002, 2012):
         max_data, sum_data = 0, 0
         temp = data[year]
@@ -2052,7 +2053,9 @@ def format_data(data: dict) -> dict:
             data[year][i] = {"name": name_list[i], "value": temp[i]}
         data[str(year) + "max"] = int(max_data / 100) * 100
         data[str(year) + "sum"] = sum_data
+    print(2222,data)
     return data
+
 
 
 # GDP
@@ -2068,7 +2071,7 @@ total_data["dataEstate"] = format_data(data=data_estate)
 # 金融
 total_data["dataFinancial"] = format_data(data=data_financial)
 
-
+print(total_data)
 #####################################################################################
 # 2002 - 2011 年的数据
 def get_year_overlap_chart(year: int) -> Bar:

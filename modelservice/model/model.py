@@ -17,17 +17,6 @@ class LLM_Model():
             model = self.config.model_name()
 
         self.llm = Ollama(model=model)
-        # self.conversation = ConversationChain(
-        #     llm=self.llm,
-        #     verbose=True,
-        #     # memory=ConversationSummaryMemory(llm = self.llm),
-        #     # memory=ConversationBufferWindowMemory(k=1),
-        #     # memory=ConversationSummaryBufferMemory(llm=self.llm, max_token_limit=40),
-        #     # memory=ConversationBufferMemory(llm=self.llm)
-        # )
-
-    # def memory_chain(self):
-    #     print(self.conversation.predict(input="Good morning AI!"))
 
     def ollama_extraction_feature(self,sentence):
 
@@ -70,11 +59,6 @@ class LLM_Model():
 
         return result
 
-
-    # def ollama_batch_schemas(self,group_feature_json):
-    #     for k,v in group_feature_json.items():
-    #         ResponseSchema(name="product_name", description=self.config.prompt_info()["product_name"])
-
     def ollama_generation_one_paragraph(self,response_schemas,product_name,paragraph_intro,input_json,word_num=50):
         oup_parser = StructuredOutputParser.from_response_schemas(response_schemas)
         format_instructions = oup_parser.get_format_instructions()
@@ -96,9 +80,9 @@ class LLM_Model():
         prompt = PromptTemplate(input_variables=["user_input"], template=template,
                                 partial_variables={"format_instructions": format_instructions})
         promptValue = prompt.format(user_input=f"{input_json}")
-        # print(promptValue)
+
         result = self.llm(promptValue)
-        # result = self.conversation.predict(input=promptValue)
+
         return result
 
 
