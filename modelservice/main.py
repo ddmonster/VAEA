@@ -48,7 +48,7 @@ class Product_Introduce_NLG(Config):
                 image_path = os.path.join(self.image_folder_path(),product_json['id']+'.jpg')
                 if not os.path.exists(image_path):
                     image_path = None
-                print('final result',{'product_introduction': product_text,'image_path':image_path})
+
                 return {'product_introduction': product_text,'image_path':image_path,'data':product_json}
 
     def product_dashboard_1(self,brand):
@@ -62,7 +62,14 @@ class Product_Introduce_NLG(Config):
         return {'html_path':html_path,'text':text}
 
     def product_dashboard_2(self):
-        pass
+        result = self.dc.bard3d_analysis()
+        if result is None:
+            return None
+
+        html_path, y_scale_data, x_scale_data, z_data = result
+        text = self.rb.bar3d_map_text_generation(y_scale_data=y_scale_data,x_scale_data=x_scale_data,z_data=z_data)
+
+        return {'html_path': html_path, 'text': text}
 
     def main_run(self,sentence):
         result_json = self.product_introduction(sentence=sentence)
@@ -79,13 +86,19 @@ class Product_Introduce_NLG(Config):
                 dashboard_1 = self.product_dashboard_1(brand=brand)
                 result_json['dashboard_1']=dashboard_1
 
+            dashboard_2 = self.product_dashboard_2()
+            result_json['dashboard_2']=dashboard_2
+
+        print('final result', result_json)
+        return result_json
+
 
 
 
 if __name__ == '__main__':
     sentence1 = "I'd like to buy a red PHILIPS fryer that has 3.2 litres and mades by plastic and the maximum energy consumption is two thousand wattage.I can use it to roast, broil and steam. In addition the product cannot be sold for more than 3000 rupee and the home kitchen rank is about 23000. Also, it should have the nonstick.Finally, it should be made in China and weight less than six kilograms."
     sentence2 = "I'd like to buy a fryer that has 3.2 litres and the maximum energy consumption is two thousand wattage.I can use it to roast, broil and steam. In addition the product cannot be sold for more than 3000 rupee and the home kitchen rank is about 23000. Also, it should have the nonstick.Finally, it should be made in China"
-    sentences = [sentence1,sentence2]
+    sentences = [sentence1]
     for sentence in sentences:
         pin=Product_Introduce_NLG()
         pin.main_run(sentence=sentence)
