@@ -1,0 +1,27 @@
+urls: Product website
+product_name: Product name
+brand: Brand
+star_rating: Star rating
+number_of_rating: Number of reviews
+mrp: Market price or suggested retail price (in ₹ Indian Rupees)
+sale_price: Sale price (in ₹ Indian Rupees)
+colour: Color
+capacity: Capacity (with unit)
+wattage: Wattage (without unit)
+country_of_origin: Country of origin
+home_kitchen_rank: Home kitchen appliance ranking
+air_fryers_rank: Air fryer ranking
+technical_details: Technical details in JSON format, containing various features. Each product may have a different set of keys in this JSON for frontend display.
+description: Natural language product description
+asin: Product identification number, similar to the ID column in the database
+capacity_1: Capacity without unit
+weight: Weight (with unit)
+Has_Nonstick_Coating: Whether it has a non-stick coating
+Material: Material
+Manufacturer: Manufacturer
+Control_Method: Control technology (touch or app control)
+Model_Name: Model name
+Recommended_Uses_For_Product: Recommended uses for the product (baking, roasting, steaming, heating)
+Special_Feature: Special features
+Max_Temperature_Setting: Maximum temperature setting
+Imported_By: Importer's address

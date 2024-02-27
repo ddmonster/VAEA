@@ -41,7 +41,6 @@ class Product_Introduce_NLG(Config):
                 feedback = f'Sorry, cannot find any feature, please try again.'
                 print(feedback)
                 print(e)
-
                 return {'product_introduction':feedback,'image_path':None,'data':None}
 
             else:
@@ -71,6 +70,15 @@ class Product_Introduce_NLG(Config):
 
         return {'html_path': html_path, 'text': text}
 
+    def product_dashboard_3(self):
+        result = self.dc.flow_analysis()
+        if result is None:
+            return None
+
+        html_path, date_list, brands_list, sale_price_total_dic, mrp_total_dic = self.dc.flow_analysis()
+        text = self.rb.flow_chart_text_generation(date_list=date_list,brands_list=brands_list,sale_price_total_dic=sale_price_total_dic,mrp_total_dic=mrp_total_dic)
+        return {'html_path': html_path, 'text': text}
+
     def main_run(self,sentence):
         result_json = self.product_introduction(sentence=sentence)
         if result_json['data'] is None:
@@ -89,6 +97,9 @@ class Product_Introduce_NLG(Config):
             dashboard_2 = self.product_dashboard_2()
             result_json['dashboard_2']=dashboard_2
 
+            dashboard_3 = self.product_dashboard_3()
+            result_json['dashboard_3'] = dashboard_3
+
         print('final result', result_json)
         return result_json
 
@@ -98,9 +109,8 @@ class Product_Introduce_NLG(Config):
 if __name__ == '__main__':
     sentence1 = "I'd like to buy a red PHILIPS fryer that has 3.2 litres and mades by plastic and the maximum energy consumption is two thousand wattage.I can use it to roast, broil and steam. In addition the product cannot be sold for more than 3000 rupee and the home kitchen rank is about 23000. Also, it should have the nonstick.Finally, it should be made in China and weight less than six kilograms."
     sentence2 = "I'd like to buy a fryer that has 3.2 litres and the maximum energy consumption is two thousand wattage.I can use it to roast, broil and steam. In addition the product cannot be sold for more than 3000 rupee and the home kitchen rank is about 23000. Also, it should have the nonstick.Finally, it should be made in China"
-    sentences = [sentence1]
+    sentence3 = "I want to buy a fryer"
+    sentences = [sentence3]
     for sentence in sentences:
         pin=Product_Introduce_NLG()
         pin.main_run(sentence=sentence)
-    # print(113333)
-    # pin.product_introduction(sentence=sentence)

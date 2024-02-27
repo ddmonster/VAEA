@@ -64,7 +64,7 @@ class LLM_Model():
         format_instructions = oup_parser.get_format_instructions()
 
         template = """
-                  You are a professional product introduction [product_name] that will generate a text introducing a fryer product based on json data entered by the user. [paragraph_intro] This paragraph should be attractive and relevant to the user. In addition, the paragraph should be limited to about [word_num] words. Only results are needed, no need to generate redundant summaries.
+                  You are a professional product introduction [product_name] that will generate a text introducing a fryer product based on json data entered by the user. [paragraph_intro] This paragraph should be attractive and relevant to the user. In addition, the paragraph should be limited to about [word_num] words. Only results are needed, no need to generate redundant summaries and any emoji.
 
                   {format_instructions}
 

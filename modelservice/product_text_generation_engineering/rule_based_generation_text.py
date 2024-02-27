@@ -1,5 +1,6 @@
-import numpy as np
+import random
 
+import numpy as np
 from modelservice.common.utils import Rule_Bsed_Language_Util
 
 
@@ -74,6 +75,65 @@ class Rule_Based_Generation_Text(Rule_Bsed_Language_Util):
 
         print(text)
         return text
+    def flow_chart_text_generation(self,date_list,brands_list,sale_price_total_dic,mrp_total_dic):
+
+        text = f"Let us give you an idea of what the top {len(brands_list)} brands on Amazon India have been selling for in the last {len(date_list)} days. "
+        best_buy_day = ''
+        cheapest_avg_sale_price = np.inf
+        for i,date in enumerate(date_list):
+            sale_price = sale_price_total_dic[date]
+            mrp = mrp_total_dic[date]
+            sale_price_only = [x['value'] for x in sale_price]
+            sale_price_only_no_zero = [x['value'] for x in sale_price if x['value'] != 0]
+            avg_sale_price = int(np.mean(sale_price_only_no_zero))
+
+            mrp_only = [x['value'] for x in mrp]
+            mrp_only_no_zero = [x['value'] for x in mrp if x['value'] != 0]
+            avg_mrp = int(np.mean(mrp_only_no_zero))
+
+            sale_price_highest_item = sale_price[sale_price_only.index(max(sale_price_only_no_zero))]['name']
+            sale_price_highest_item_price = sale_price[sale_price_only.index(max(sale_price_only_no_zero))]['value']
+            sale_price_cheapest_item = sale_price[sale_price_only.index(min(sale_price_only_no_zero))]['name']
+            sale_price_cheapest_item_price = sale_price[sale_price_only.index(min(sale_price_only_no_zero))]['value']
+
+            mrp_highest_item = mrp[mrp_only.index(max(mrp_only_no_zero))]['name']
+            mrp_highest_item_price = mrp[mrp_only.index(max(mrp_only))]['value']
+            mrp_cheapest_item = mrp[mrp_only.index(min(mrp_only_no_zero))]['name']
+            mrp_cheapest_item_price = mrp[mrp_only.index(min(mrp_only_no_zero))]['value']
+            avg_dscount = int(avg_sale_price/avg_mrp * 100)
+
+
+            if i == 0:
+                text += f"First of all on {self.date_2_language(date)}, the average actual selling price of fryer across brands was {avg_sale_price}₹, while the highest suggested retail price of the {mrp_highest_item}'s fryer was a whopping {mrp_highest_item_price}. The average discount rate on this day was {avg_dscount}%. "
+
+            elif i == len(date_list)-1:
+                text += f"The last day was {self.date_2_language(date)}, on which a total of {len(sale_price_only_no_zero)} {'vendor' if len(sale_price_only_no_zero) >=2 else 'vendors'} sold fryers at an average actual selling price of {avg_sale_price}₹, while the average suggested retail price was {avg_mrp}₹. "
+
+            else:
+                text += f"{self.random_choose(['Thereafter','Next','Then','Subsequently'])}, it's {date}. The highest actual retail price product on this day sold for {sale_price_highest_item_price} from {sale_price_highest_item}"
+                if len(sale_price_only_no_zero) >= 2:
+                    text += f", while the lowest retail price was for {sale_price_cheapest_item} at just {sale_price_cheapest_item_price}₹. "
+
+                else:
+                    text += ". "
+            if random.random() >=0.5:
+                if avg_dscount <= 60:
+                    text += f"{self.random_choose(['It was a huge discount','The discount was substantial'])} on this day, {self.random_choose(['making it a worthwhile day to purchase a fryer. ','looks like it was well worth getting a fryer on this day. '])}"
+
+                elif avg_dscount >= 80:
+                    text += f"The discount was {self.random_choose(['not as noticeable','less pronounced on'])} this day, so perhaps you can hold off a bit longer. "
+
+            if best_buy_day == "":
+                best_buy_day = self.date_2_language(date)
+
+            else:
+                if avg_sale_price < cheapest_avg_sale_price:
+                    cheapest_avg_sale_price =avg_sale_price
+
+        text += f"{self.random_choose(['Overall, looking at the past few days,','In a broader perspective, observing the recent days,'])} the best day to buy fryers was {best_buy_day}, with an average actual retail price of just {cheapest_avg_sale_price}.₹"
+        print(text)
+        return text
+
 
 if __name__ == '__main__':
     rb = Rule_Based_Generation_Text()

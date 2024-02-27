@@ -76,7 +76,6 @@ class Dashboard_Chart(Config):
         return html_path,y_scale_data,x_scale_data,z_data
 
 
-
     def flow_analysis(self):
         brands_list = self.da.get_flow_x_scale()
         date_list = self.da.get_flow_date(brands_list=brands_list)
@@ -88,13 +87,13 @@ class Dashboard_Chart(Config):
             sale_price_total_dic,mrp_total_dic = result
             timeline = Timeline()
             for date in date_list:
-                # timeline.add()
                 timeline.add(self.get_date_overlap_chart(date=date,brands_list=brands_list,sale_price_total_dic=sale_price_total_dic,mrp_total_dic=mrp_total_dic), time_point=str(date))
 
             html_path = os.path.join(self.chart_html_folder_path(), 'flow_date.html')
             timeline.add_schema(is_auto_play=True, play_interval=1800)
             timeline.render(html_path)
-            return html_path
+
+            return html_path,date_list,brands_list,sale_price_total_dic,mrp_total_dic
 
     def get_date_overlap_chart(self,date,brands_list,sale_price_total_dic,mrp_total_dic) -> Bar:
         bar = (
@@ -110,7 +109,6 @@ class Dashboard_Chart(Config):
                 y_axis=mrp_total_dic[date],
                 label_opts=opts.LabelOpts(is_show=True),
             )
-
             .set_global_opts(
                 title_opts=opts.TitleOpts(
                     title="{} - Fryers Price Indicator".format(date), subtitle="Data from Amazon India"
@@ -131,8 +129,9 @@ class Dashboard_Chart(Config):
             .add(
                 series_name="MRP vs Sale Price",
                 data_pair=[
-                    ["MRP", mrp_total_dic["{}sum".format(date)]],
                     ["Sale Price", sale_price_total_dic["{}sum".format(date)]],
+                    ["MRP", mrp_total_dic["{}sum".format(date)]],
+
                 ],
                 center=["80%", "27%"],
                 radius="28%",
@@ -256,11 +255,9 @@ class Dashboard_Analysis():
             return None
 
         else:
-            print('x_scale',x_scale)
-            print('y_scale',y_scale)
             for i,v_x in enumerate(x_scale):
                 for j,v_y in enumerate(y_scale):
-                    # z_data.append([i,j])
+
                     kv = {'brand':v_y,'star_rating':v_x}
 
                     result = self.dbu.select_column_data_within_kv(db = self.dbu.db_path(),table_name=self.dbu.table_name(),column_name='sale_price',kv=kv)
@@ -396,8 +393,7 @@ class Dashboard_Analysis():
             sale_price_total_dic[f'{date}sum'] = sum(sale_price_list)
             mrp_total_dic[date] = mrp_date_list
             mrp_total_dic[f'{date}sum'] = sum(mrp_list)
-        print('sale_price_total_dic',sale_price_total_dic)
-        print('mrp_total_dic',mrp_total_dic)
+
         return sale_price_total_dic,mrp_total_dic
 
     def sort_date(self,date_list):
@@ -413,8 +409,14 @@ class Dashboard_Analysis():
 
 
 if __name__ == '__main__':
+    from modelservice.product_text_generation_engineering.rule_based_generation_text import Rule_Based_Generation_Text
     dc = Dashboard_Chart()
-    dc.flow_analysis()
+    rb = Rule_Based_Generation_Text()
+    html_path,date_list,brands_list,sale_price_total_dic,mrp_total_dic = dc.flow_analysis()
+    rb.flow_chart_text_generation(date_list=date_list,brands_list=brands_list,sale_price_total_dic=sale_price_total_dic,mrp_total_dic=mrp_total_dic)
+
+
+
     # dc.bard3d_analysis()
     # dc.world_map_analysis(brand='PHILIPS')
     # da= Dashboard_Analysis()

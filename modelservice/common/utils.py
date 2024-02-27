@@ -98,6 +98,23 @@ class Rule_Bsed_Language_Util():
                     language += f'{word}'
         return language
 
+    def date_2_language(self,date_string,isyear='random'):
+        date_obj = datetime.datetime.strptime(date_string, '%m/%d/%Y')
+        if isyear == 'random':
+            num = random.random()
+            if num >= 0.5:
+                lang_date = date_obj.strftime('%B %#d, %Y')
+            else:
+                lang_date = date_obj.strftime('%B %#d')
+
+        elif isyear:
+            lang_date = date_obj.strftime('%B %#d, %Y')
+
+        else:
+            lang_date = date_obj.strftime('%B %#d')
+
+        return lang_date
+
 
 class Data_Base_Util(Config):
     def __init__(self):
