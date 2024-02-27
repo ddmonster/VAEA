@@ -1,10 +1,15 @@
-#规划种类优先级（段落顺序）
 
 
+'''
+class Documentation_Planning:
+    This class is the document planning class, which specifies to which paragraph the different categories of feature groups belong and which ones are to be introduced in this paragraph.
+'''
 class Documentation_Planning():
     def __init__(self):
         pass
 
+    # paragraph_1: he first paragraph belongs to the category basic_info. This paragraph needs to describe basic product information. Note that this prompt will be used in the prompt project
+    # to suggest what kind of content the model should generate based on the data. This can further improve accuracy. In addition, this paragraph defaults to an opening paragraph.
     def paragraph_1(self,is_opening=True,is_closing=False):
         if is_opening:
             return 'basic_info','This text is the beginning of the article and is used to present basic information about the product.'
@@ -13,6 +18,8 @@ class Documentation_Planning():
 
         else:
             return 'basic_info', 'This text is used to present basic information about the product.'
+
+    # paragraph_2: The second paragraph falls under the category of POPULARITY and it focuses on the popularity of the product.
     def paragraph_2(self,is_opening=False,is_closing=False):
         if is_opening:
             return 'popularity','This text is the beginning of the article and is used to present the hotness of the product among the consumer base.'
@@ -21,6 +28,7 @@ class Documentation_Planning():
         else:
             return 'popularity', 'This text is used to present the hotness of the product among the consumer base.'
 
+    # paragraph_3: The third paragraph focuses on price. It falls under the category of price.
     def paragraph_3(self,is_opening=False,is_closing=False):
         if is_opening:
             return 'price','This text is the beginning of the article and is used to present the price of the product.'
@@ -29,7 +37,7 @@ class Documentation_Planning():
         else:
             return 'price', 'This text is used to present the price of the product.'
 
-
+    # paragraph_4: The fourth paragraph focuses on basic functions. It belongs to the category basic_functions.
     def paragraph_4(self,is_opening=False,is_closing=False):
         if is_opening:
             return 'basic_functions','This text is the beginning of the article and is used to present the basic functions of the product.'
@@ -38,6 +46,7 @@ class Documentation_Planning():
         else:
             return 'basic_functions', 'This text is used to present the basic functions of the product.'
 
+    # paragraph_5: The fifth paragraph focuses on advanced functions. It belongs to the category advanced_functions.
     def paragraph_5(self,is_opening=False,is_closing=False):
 
         if is_opening:
@@ -47,14 +56,7 @@ class Documentation_Planning():
         else:
             return 'advanced_functions', 'This text is used to present the advanced functions of the product.'
 
-    # def paragraph_6(self,is_opening=False,is_closing=True):
-    #     if is_opening:
-    #         return 'source', 'This text is the beginning of the article and is used to present the country of origin of the product.'
-    #     elif is_closing:
-    #         return 'source', 'This text is the ending of the article and is used to present the country of origin of the product.'
-    #     else:
-    #         return 'source', 'This text is used to present the country of origin of the product.'
-
+    # paragraph_6: Paragraph 6 is mainly used for summarizing. It belongs to the category of summary.
     def paragraph_6(self,is_opening=False,is_closing=True):
         if is_opening:
             return 'summary', 'This text is the beginning of the article and is used to present the summary of the product.'
@@ -63,18 +65,21 @@ class Documentation_Planning():
         else:
             return 'summary', 'This text is used to present the summary of the product.'
 
+    # paragraph_7: The seventh paragraph is RULE-BASED generated without any cue words.
     def paragraph_7(self):
         return 'description'
 
-# a=  ["HEALTHY FRYING: This appliance uses air crisp technology to cook healthy-low fat versions of your favorite foods,using little to no oil. Deliver a much healthier version of the same food with great crispy fried taste and texture", "EFFORTLESS COOKING: Prepare amazing meals from your cookbook such as french fries,chicken,steak,pudding and donuts.Make yourself feel like a professional chef in your kitchen with this air fryer that will replace any one of your kitchen appliances", "FAST & EFFICIENT HEATING: With 1000W of power, this air fryer heats up in 2-3 minutes and cooks food faster than a conventional oven so you can save money at the same time as cutting down the calories", "DIGITAL TEMPERATURE & TIME CONTROL: With digital touch control panel,simply insert food into the hot air fryer,set the time and temperature and cook your ingredients efficiently.Cook-up casseroles, beef, chicken breasts and even desserts", "SELECTIONS AT A TOUCH: Easy to use 8 Preset Menu that do all the cooking math for you. Just choose your preset with 1 easy tap on the display and you"re ready to cook. You can also set cooking temp/time as per your convenience."]
 
-#规划种类内部的优先级（句子优先级）
+'''
+class Micro_Planning:
+    This class defines which feature points should be included under each major class, and the system will make appropriate deletions to each class 
+    as may be needed based on the available features available.
+'''
 class Micro_Planning():
     def __init__(self):
         pass
 
     def basic_info(self):
-
         return ['product_name', 'brand', 'Manufacturer', 'Model_Name']
 
     def price(self):
@@ -89,8 +94,6 @@ class Micro_Planning():
     def advanced_functions(self):
         return ['Has_Nonstick_Coating', 'Max_Temperature_Setting', 'Control_Method', 'Special_Feature','Recommended_Uses_For_Product']
 
-    # def source(self):
-    #     return ['country_of_origin']
     def summary(self):
         return ['country_of_origin','description']
 

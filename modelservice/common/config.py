@@ -1,6 +1,9 @@
 import os.path
 
-
+'''
+class Config(): 
+    Encapsulation path information, the meaning of the prompt word for the prompt project.
+'''
 class Config():
     def __init__(self):
         self.current_path = os.path.abspath(__file__)

@@ -1,6 +1,6 @@
 import os.path
 import numpy as np
-import copy
+
 from pyecharts import options as opts
 from pyecharts.charts import Map
 from pyecharts.charts import Bar3D
@@ -9,11 +9,19 @@ from pyecharts.charts import Timeline, Bar, Pie
 from modelservice.common.config import Config
 from modelservice.common.utils import Data_Base_Util
 
+
+'''
+class Dashboard_Chart: 
+    This class is used to draw the Dashboard.
+'''
 class Dashboard_Chart(Config):
     def __init__(self):
         super().__init__()
         self.da = Dashboard_Analysis()
 
+
+    # world_map_analysis: Mapping of product origins. Given a product brand, data on the brand's origin is obtained by querying a database
+    # and presented on a world map.
     def world_map_analysis(self,brand):
         result = self.da.get_map_list(brand=brand)
         if result is None:
@@ -35,6 +43,7 @@ class Dashboard_Chart(Config):
         )
         return html_path,map_dic
 
+    # bard3d_analysis: Plot a histogram of the selling price of each brand's products at different star ratings. This bar chart is a 3D bar chart.
     def bard3d_analysis(self):
         y_scale_data = self.da.get_bard3d_y_scale()
         x_scale_data = self.da.get_bard3d_x_scale()
@@ -75,7 +84,8 @@ class Dashboard_Chart(Config):
         )
         return html_path,y_scale_data,x_scale_data,z_data
 
-
+    # flow_analysis: Mapping the flow of time. Given a specified set of brands, obtain the selling prices of these brands on different dates.
+    # And show a histogram of selling prices by day. The graph can be automatically slid to switch to a different date's histogram.
     def flow_analysis(self):
         brands_list = self.da.get_flow_x_scale()
         date_list = self.da.get_flow_date(brands_list=brands_list)
@@ -95,6 +105,7 @@ class Dashboard_Chart(Config):
 
             return html_path,date_list,brands_list,sale_price_total_dic,mrp_total_dic
 
+    # get_date_overlap_chart: Given a date and relevant sales data, plot a bar graph of sales prices for that day.
     def get_date_overlap_chart(self,date,brands_list,sale_price_total_dic,mrp_total_dic) -> Bar:
         bar = (
             Bar()
@@ -141,10 +152,15 @@ class Dashboard_Chart(Config):
         return bar.overlap(pie)
 
 
+'''
+class Dashboard_Analysis:
+    A series of data analysis methods to be used when drawing the dashboard.
+'''
 class Dashboard_Analysis():
     def __init__(self):
         self.dbu = Data_Base_Util()
 
+    # get_map_list: Given a brand, find all the origins of that brand by checking the database.
     def get_map_list(self,brand):
         kv = {'brand':brand}
         result = self.dbu.select_data_within_kv(db=self.dbu.db_path(),table_name=self.dbu.table_name(),kv =kv)
@@ -189,6 +205,7 @@ class Dashboard_Analysis():
 
                         return country_list,country_dic
 
+    # get_bard3d_y_scale: Get the y-axis coordinates of the 3D bar chart, the top n most popular brands. The default is 7.
     def get_bard3d_y_scale(self,rank_num=7):
         result = self.dbu.select_data_within_column(db= self.dbu.db_path(),table_name=self.dbu.table_name(),column_name='brand')
         if result is None:
@@ -201,10 +218,9 @@ class Dashboard_Analysis():
 
             else:
                 brands = [x[0] for x in brands ]
-
                 brands_set = set(brands)
-
                 brands_dict = {}
+
                 for brand in brands_set:
                     num = brands.count(brand)
                     brands_dict[brand]= num
@@ -219,6 +235,7 @@ class Dashboard_Analysis():
 
                 return y_scale_data
 
+    # get_bard3d_x_scale: Get the x-axis coordinates of the 3D histogram, which is the star rating, from 0 to 5 in steps of 0.1.
     def get_bard3d_x_scale(self):
         result = self.dbu.select_data_within_column(db=self.dbu.db_path(), table_name=self.dbu.table_name(),
                                                     column_name='star_rating')
@@ -249,6 +266,8 @@ class Dashboard_Analysis():
                     x_scale = [str(int(float(value))) if '.0' in value else value for value in x_scale]
                     return x_scale
 
+    # get_bard3d_z_scale: Get the z-axis coordinates of the 3D bar chart, which is the selling price for different star ratings
+    # and different brands. If the price does not exist in the query database for the specified star rating and brand, the default value is 0.
     def get_bard3d_z_data(self,x_scale,y_scale):
         z_data = []
         if (x_scale is None) | (y_scale is None):
@@ -269,6 +288,7 @@ class Dashboard_Analysis():
 
             return z_data
 
+    # get_flow_x_scale: Get the x-axis coordinates of the time-flow graph, which are the top n most popular brands.
     def get_flow_x_scale(self,rank_num=10):
         result = self.dbu.select_data_within_column(db=self.dbu.db_path(), table_name=self.dbu.table_name(),
                                                     column_name='brand')
@@ -298,6 +318,7 @@ class Dashboard_Analysis():
 
                 return x_scale_data
 
+    # get_flow_date: Gets the date range of the time flow graph.
     def get_flow_date(self,brands_list):
 
         dates_list = []
@@ -324,6 +345,8 @@ class Dashboard_Analysis():
         dates_list = self.sort_date(date_list=dates_list)
         return dates_list
 
+    # get_flow_sale_price_mrp: Get the sale_price,mrp for different brands and dates, and combine these data into two jsons for input into the
+    # function that generates the chart.
     def get_flow_sale_price_mrp(self,brands_list,date_list):
         sale_price_total_dic ={}
         mrp_total_dic = {}
@@ -396,37 +419,10 @@ class Dashboard_Analysis():
 
         return sale_price_total_dic,mrp_total_dic
 
+    # sort_date: Given a list of dates, sort the dates in chronological order.
     def sort_date(self,date_list):
         from datetime import datetime
         date_objects = [datetime.strptime(date_str, '%m/%d/%Y') for date_str in date_list]
         sorted_dates = sorted(date_objects)
         sorted_dates = [x.strftime('%#m/%#d/%Y') for x in sorted_dates]
         return sorted_dates
-
-
-
-
-
-
-if __name__ == '__main__':
-    from modelservice.product_text_generation_engineering.rule_based_generation_text import Rule_Based_Generation_Text
-    dc = Dashboard_Chart()
-    rb = Rule_Based_Generation_Text()
-    html_path,date_list,brands_list,sale_price_total_dic,mrp_total_dic = dc.flow_analysis()
-    rb.flow_chart_text_generation(date_list=date_list,brands_list=brands_list,sale_price_total_dic=sale_price_total_dic,mrp_total_dic=mrp_total_dic)
-
-
-
-    # dc.bard3d_analysis()
-    # dc.world_map_analysis(brand='PHILIPS')
-    # da= Dashboard_Analysis()
-    # da.get_flow_x_scale()
-    # brands_list = da.get_flow_x_scale()
-    # date_list = da.get_flow_date(brands_list=brands_list)
-    # da.get_flow_sale_price_mrp(brands_list=brands_list,date_list=date_list)
-    # da.get_map_list('PHILIPS')
-    # da.get_bard3d_y_scale()
-    # x_scale = da.get_bard3d_x_scale()
-    # y_scale = da.get_bard3d_y_scale()
-    # z_data = da.get_bard3d_z_data(x_scale=x_scale,y_scale=y_scale)
-

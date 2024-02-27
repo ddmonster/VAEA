@@ -1,6 +1,10 @@
 from modelservice.model.model import LLM_Model
 from modelservice.common.utils import Common_Utils
 
+'''
+class Feature_Engineering:
+    This class encapsulates the methods for feature extraction
+'''
 class Feature_Engineering(LLM_Model):
     def __init__(self):
         super().__init__()
@@ -16,6 +20,7 @@ class Feature_Engineering(LLM_Model):
             'others': ['asin', 'capacity_1', 'imported_by','technical_details']
         }
 
+    # extraction: This method extracts the features and feature values in the statement by asking LLM and transforms the returned json string into a json object.
     def extraction(self,sentence):
         feature_string = self.ollama_extraction_feature(sentence=sentence)
         feature_json = self.cu.string_2_json(json_string=feature_string)
@@ -23,9 +28,11 @@ class Feature_Engineering(LLM_Model):
 
         return feature_json
 
+    # filter: After matching the best products, further screening of features is required before further text generation. This filtering removes product features
+    # that are empty or not available as much as possible.
     def filter(self,item_tuple):
         product_json = self.cu.tuple_2_json(tuple_string=item_tuple)
-        # bb = ["Multi Function : Broil , Roast , Bake , Grill , Fry", "Healthy Cooking : No Oil , No Fat , No Burn Flavor", "Perfect & Even Cooking", "Fast & Efficient Cooling.", "Save energy upto 60%"]
+
         for k,v in product_json.items():
 
             if (v == 'Not Available') | (v == 'NULL') | (v == 'not available'):
@@ -34,8 +41,10 @@ class Feature_Engineering(LLM_Model):
                     if k in feature_list:
                         feature_list.remove(k)
                         self.init_feature_group[group_name] = feature_list
+
                     else:
                         continue
+
             else:
                 continue
 
@@ -46,16 +55,3 @@ class Feature_Engineering(LLM_Model):
         del self.init_feature_group['others']
         print(self.init_feature_group)
         return self.init_feature_group,product_json
-
-
-
-if __name__ == '__main__':
-    from modelservice.database.dataset import Dateset
-
-    sentence = "I'd like to buy a red PHILIPS fryer that has 3.2 litres and mades by plastic and the maximum energy consumption is two thousand wattage.I can use it to roast, broil and steam. In addition the product cannot be sold for more than 3000 rupee and the home kitchen rank is about 23000. Also, it should have the nonstick.Finally, it should be made in China and weight less than six kilograms."
-
-    ds = Dateset()
-    ds.make_dataset()
-
-    fe = Feature_Engineering()
-    result = fe.extraction(sentence=sentence)
