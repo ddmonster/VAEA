@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+
+
+
+    function getCogn(){
+        const SpeechRecognition =
+                window.SpeechRecognition || window.webkitSpeechRecognition;
+        const SpeechGrammarList =
+            window.SpeechGrammarList || window.webkitSpeechGrammarList;
+        const SpeechRecognitionEvent =
+            window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+
+        const SpeechSynthesisUtterance =  window.SpeechSynthesisUtterance;
+        const speechSynthesis = window.speechSynthesis;
+
+
+
+        const recognition = new SpeechRecognition();
+        const speechRecognitionList = new SpeechGrammarList();
+        recognition.grammars = speechRecognitionList;
+        recognition.continuous = false;
+        recognition.lang = "en-US";
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        return recognition;
+    }
+    recognition = getCogn();
+
+    function startSpeaking() {
+        recognition.start();
+        console.log("Ready to receive a color command.");
+    };
+    function speak(words){
+        let help = new window.SpeechSynthesisUtterance(words);
+        help.lang = "en-US";
+        help.voice = window.speechSynthesis.getVoices()[0];
+        window.speechSynthesis.speak(help);
+        return help;
+    }
+    recognition.onresult = (event) => {
+        console.log(event)
+        recognition.stop();
+        let utterance = new SpeechSynthesisUtterance(event.results[0][0].transcript);
+        speechSynthesis.speak(utterance);
+        console.log()
+    };
+    function onloadboday(){
+                console.log("loaded")
+                speak("hello")
+            }
+    </script>
+</head>
+
+<body onload="onloadboday()">
+    <div id="output"></div>
+    <button onclick="startSpeaking()">Start Speaking</button>
+    <button onclick="stopSpeaking()">Stop Speaking</button>
+</body>
+
+</html>
