@@ -34,7 +34,7 @@ class Search_Match():
     #                                    and we end up with 15 feature values, which are then weighted to find the weight of each feature value as the attention value of
     #                                    the feature.
     #
-    #     ---Sorting Attention Algorithms: This algorithm we sort 15 features based on the weighted attention algorithm. After sorting, we subtract 15 from the sorted ordinal
+    #     ---Sorting Attention Algorithm: This algorithm we sort 15 features based on the weighted attention algorithm. After sorting, we subtract 15 from the sorted ordinal
     #                                    number and divide by 15 to force this value to be the attention value for that feature.
     #
     #

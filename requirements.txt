@@ -1,0 +1,7 @@
+datasets==2.17.0
+fuzzywuzzy==0.18.0
+langchain==0.1.9
+langchain_community==0.0.24
+numpy==1.26.4
+pyecharts==2.0.4
+tqdm==4.66.2

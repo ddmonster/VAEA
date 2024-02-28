@@ -15,7 +15,7 @@ class Feature_Engineering(LLM_Model):
             'price': ['mrp', 'sale_price'],
             'basic_functions': ['colour', 'Material', 'capacity', 'wattage', 'Weight'],
             'advanced_functions':['Has_Nontick_Coating', 'Max_Temperature_Setting', 'Control_Method', 'Special_Feature','Recommended_Users_For_Product'],
-            'source': ['country_of_origin'],
+            'summary': ['country_of_origin','description'],
             'description': [ 'description'],
             'others': ['asin', 'capacity_1', 'imported_by','technical_details']
         }
