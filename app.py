@@ -1,10 +1,9 @@
 import fastapi
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
-from .modelservice.main import Product_Introduce_NLG
+from modelservice.main import Product_Introduce_NLG
 from result_sample import result as fake_result
 import shutil
-from pydantic import Json
 from pathlib import Path
 
 static_dir = Path("./frontend")
@@ -28,7 +27,8 @@ def create_app():
 
 app = create_app()
 
-def result_process(result:dict):
+
+def result_process(result: dict):
     img_path = Path(result["image_path"])
     shutil.copyfile(img_path, static_dir)
     result["image_path"] = f"/static/{img_path.name}"
@@ -46,12 +46,20 @@ def result_process(result:dict):
         result["dashboard_3"] = f"/static/{Path(d3).name}"
     return result
 
+
 @app.post("/instruction")
 def invoke_model(instruction: str):
-    result:dict = app.state.model.main_run(sentence=instruction)
+    result: dict = app.state.model.main_run(sentence=instruction)
 
     return result_process(result)
+
 
 @app.post("/instruction_t")
 def invoke_model_test_data(instruction: str):
     return result_process(fake_result)
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app)
