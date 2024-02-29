@@ -11,7 +11,7 @@ class LLM_Mode:
 class LLM_Model():
     def __init__(self, model=None):
         self.config = Config()
-        print(model,11111)
+
         if model is None:
             model = self.config.model_name()
 
@@ -74,7 +74,7 @@ class LLM_Model():
     # suitable for the generation of consecutive natural segments, because each natural segment is almost feature-independent, and the content of
     # the previous natural segment cannot be used as the input of the next natural segment.
 
-    def ollama_generation_one_paragraph(self,response_schemas,product_name,paragraph_intro,input_json,word_num=50):
+    def ollama_generation_one_paragraph(self,response_schemas,product_name,paragraph_intro,input_json,word_num=20):
         oup_parser = StructuredOutputParser.from_response_schemas(response_schemas)
         format_instructions = oup_parser.get_format_instructions()
 
