@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commercial-Quality Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        #left, #right {
+            flex: 1;
+            padding: 30px;
+        }
+
+        #product-display {
+            text-align: center;
+        }
+
+        #product-image {
+            width: 80%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #attributes {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        #iframe-container {
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #page-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #voice-input {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 10px rgba(40, 167, 69, 0.5);
+        }
+
+        #voice-input:hover {
+            background-color: #218838;
+        }
+
+        #bottom-buttons {
+            display: flex;
+            justify-content: center;
+        }
+
+        #bottom-buttons button {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="left">
+        <div id="product-display">
+            <img id="product-image" src="placeholder.jpg" alt="Product Image">
+            <div id="attributes">
+                <p>Description: very beautiful</p>
+                <p>Price: $99.99</p>
+                <p>Colors: Blue, Red, Green</p>
+            </div>
+        </div>
+    </div>
+    <div id="right">
+        <div id="iframe-container">
+            <iframe id="iframe" src="" frameborder="0"></iframe>
+        </div>
+        <div id="page-buttons">
+            <button onclick="changePage('page1')">Page 1</button>
+            <button onclick="changePage('page2')">Page 2</button>
+            <button onclick="changePage('page3')">Page 3</button>
+        </div>
+    </div>
+</div>
+<div id="bottom-buttons">
+    <button onclick="startSpeaking()">Start Speaking</button>
+    <button onclick="stopSpeaking()">Stop Speaking</button>
+</div>
+
+<script>
+    // Function to change iframe page
+    function changePage(page) {
+        document.getElementById('iframe').src = page + '.html';
+    }
+    function getCogn(){
+        const SpeechRecognition =
+            window.SpeechRecognition || window.webkitSpeechRecognition;
+        const SpeechGrammarList =
+            window.SpeechGrammarList || window.webkitSpeechGrammarList;
+        const SpeechRecognitionEvent =
+            window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+
+        const SpeechSynthesisUtterance =  window.SpeechSynthesisUtterance;
+        const speechSynthesis = window.speechSynthesis;
+
+
+
+        const recognition = new SpeechRecognition();
+        const speechRecognitionList = new SpeechGrammarList();
+        recognition.grammars = speechRecognitionList;
+        recognition.continuous = false;
+        recognition.lang = "en-US";
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        return recognition;
+    }
+    recognition = getCogn();
+
+    function startSpeaking() {
+        recognition.start();
+        console.log("Ready to receive a color command.");
+    };
+    function speak(words){
+        let help = new window.SpeechSynthesisUtterance(words);
+        help.lang = "en-US";
+        help.voice = window.speechSynthesis.getVoices()[0];
+        window.speechSynthesis.speak(help);
+        return help;
+    }
+    recognition.onresult = (event) => {
+        console.log(event)
+        recognition.stop();
+        let utterance = new SpeechSynthesisUtterance(event.results[0][0].transcript);
+        speechSynthesis.speak(utterance);
+        console.log()
+    };
+    function onloadboday(){
+        console.log("loaded")
+        speak("hello")
+    }
+</script>
+</body>
+</html>
