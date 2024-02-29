@@ -15,12 +15,12 @@ class Product_Introduce_NLG:
 '''
 
 class Product_Introduce_NLG(Config):
-    def __init__(self):
+    def __init__(self,model=None):
         super().__init__()
         self.ds = Dateset()
-        self.fe = Feature_Engineering()
+        self.fe = Feature_Engineering(model=model)
         self.sm = Search_Match()
-        self.gt = LLM_Genertion_Text()
+        self.gt = LLM_Genertion_Text(model=model)
         self.dc = Dashboard_Chart()
         self.rb = Rule_Based_Generation_Text()
 

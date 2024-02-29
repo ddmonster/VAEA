@@ -11,7 +11,7 @@ class LLM_Mode:
 class LLM_Model():
     def __init__(self, model=None):
         self.config = Config()
-
+        print(model,11111)
         if model is None:
             model = self.config.model_name()
 

@@ -45,3 +45,49 @@ result = {
 		'text': "Let us give you an idea of what the top 10 brands on Amazon India have been selling for in the last 5 days. First of all on March 1, the average actual selling price of fryer across brands was 7547₹, while the highest suggested retail price of the Kiran Enterprise's fryer was a whopping 27500. The average discount rate on this day was 55%. Next, it's 3/2/2023. The highest actual retail price product on this day sold for 15999 from PHILIPS. Then, it's 3/3/2023. The highest actual retail price product on this day sold for 11999 from Instant, while the lowest retail price was for KIING at just 4266₹. It was a huge discount on this day, making it a worthwhile day to purchase a fryer. Subsequently, it's 3/5/2023. The highest actual retail price product on this day sold for 4505 from Inalsa. The last day was March 6, 2023, on which a total of 1 vendors sold fryers at an average actual selling price of 3795₹, while the average suggested retail price was 8900₹. It was a huge discount on this day, making it a worthwhile day to purchase a fryer. In a broader perspective, observing the recent days, the best day to buy fryers was March 1, 2023, with an average actual retail price of just 3795.₹"
 	}
 }
+
+
+b = {
+	'product_introduction': "\nIntroducing the Elekron-Air Fryer 2.2 LTR White, a game-changing kitchen appliance that will revolutionize the way you cook. With its cutting-edge technology and stylish design, this air fryer is a must-have for any health-conscious foodie. Say goodbye to greasy, unhealthy fried foods and hello to crispy, delicious meals that are cooked to perfection. Get ready to elevate your culinary experience with the Elekron-Air Fryer 2.2 LTR White.\n\n\nIntroducing the Elekron-Air Fryer, a game-changer in the world of cooking! With an impressive 4-star rating and over 8 reviews, this fryer is a must-have for any kitchen. Its advanced technology allows for crispy and delicious meals with minimal oil, making it a healthier alternative to traditional deep-frying methods. Get ready to elevate your cooking experience with the Elekron-Air Fryer!\n\n\nIntroducing the Elekron-Air Fryer, a revolutionary kitchen appliance that cooks food to crispy perfection without excess oil. With its sleek white plastic exterior and 2.2 litre capacity, this air fryer is both stylish and functional. It's powerful 1300W heating element ensures even cooking and fast results, making it a must-have for any health-conscious foodie. Get ready to enjoy your favourite fried treats, guilt-free!\n\nLet's review this Elekron-Air Fryer:\n -|->  Multi Function : Broil , Roast , Bake , Grill , Fry\n -|->  Healthy Cooking : No Oil , No Fat , No Burn Flavor\n -|->  Perfect & Even Cooking\n -|->  Fast & Efficient Cooling.\n -|->  Save energy upto 60%\n",
+	'image_path': 'C:\\Users\\Johnson-ITX\\Desktop\\VAEA\\modelservice\\database\\images\\B00YEU1JAW.jpg',
+	'data': {
+		'id': 'B00YEU1JAW',
+		'date': '3/1/2023',
+		'urls': 'https://www.amazon.in/Elekron-Air-Fryer-2-2-Ltr-White/dp/B00YEU1JAW',
+		'product_name': 'Elekron-Air Fryer 2.2 LTR White',
+		'brand': 'Elekron',
+		'star_rating': '4',
+		'number_of_reviews': '8',
+		'mrp': 'Not Available',
+		'sale_price': '4444',
+		'colour': 'White',
+		'capacity': '2.2 litres',
+		'wattage': '1300.0',
+		'country_of_origin': 'Not Available',
+		'home_kitchen_rank': 'Not Available',
+		'air_fryers_rank': 'Not Available',
+		'technical_details': '{"Special Feature": "Manual", "Colour": "White", "Capacity": "2.2 litres", "Material": "Plastic", "Recommended Uses For Product": "Broil, Bake", "Brand": "Elekron", "Wattage": "1300 Watts", "Manufacturer": "Elekron", "Item model number": "AF501WHT", "ASIN": "B00YEU1JAW"}',
+		'description': '["Multi Function : Broil , Roast , Bake , Grill , Fry", "Healthy Cooking : No Oil , No Fat , No Burn Flavor", "Perfect & Even Cooking", "Fast & Efficient Cooling.", "Save energy upto 60%"]',
+		'asin': 'B00YEU1JAW',
+		'capacity_1': '2.2',
+		'Weight': 'not available',
+		'Has_Nonstick_Coating': 'not available',
+		'Material': 'Plastic',
+		'Manufacturer': 'Elekron',
+		'Control_Method': 'not available',
+		'Model_Name': 'not available',
+		'Recommended_Uses_For_Product': 'Broil, Bake',
+		'Special_Feature': 'Manual',
+		'Max_Temperature_Setting': 'not available',
+		'Imported_By': 'not available'
+	},
+	'dashboard_1': None,
+	'dashboard_2': {
+		'html_path': 'C:\\Users\\Johnson-ITX\\Desktop\\VAEA\\modelservice\\chart\\chart_html\\bard3d.html',
+		'text': "We have picked 7 top Fryer brands on Amazon India which are PHILIPS, Inalsa, Kiran Enterprise, IBELL, KIING, SToK and Nutricook respectively. Chiefly, the most fashionable is the PHILIPS fryer, with a star rating of 4.4 for most of their fryers, which is clearly well-received by users. PHILIPS fryers are sold at an average price of 9324₹. Then, it's Inalsa. their highest priced fryers sell for 8590₹ with an average rating of 44, while the most pocket-friendly ones have a rating of 41. and sell for only 3622₹. Next, it's Kiran Enterprise. their top-priced fryers sell for 14024₹ with an average rating of 33, while the least expensive ones have a rating of 17. and sell for only 5094₹. Then, it's IBELL. their top-priced fryers sell for 8335₹ with an average rating of 40, while the most affordable ones have a rating of 42. and sell for only 3149₹. Subsequently, it's KIING. their premium-priced fryers sell for 6500₹ with an average rating of 41, while the most pocket-friendly ones have a rating of 39. and sell for only 2930₹. Thereafter, it's SToK. their top-priced fryers sell for 6024₹ with an average rating of 42, while the least expensive ones have a rating of 43. and sell for only 4749₹. The ultimate and relatively popular brand is Nutricook. Their fryers, despite having a star rating of only 4.3 on average, are the least expensive of these brands, averaging only 8655₹, which is 92% of the average price of the first place! This means that if you are on a budget, then Nutricook's fryers are your first choice for value for money. "
+	},
+	'dashboard_3': {
+		'html_path': 'C:\\Users\\Johnson-ITX\\Desktop\\VAEA\\modelservice\\chart\\chart_html\\flow_date.html',
+		'text': "Let us give you an idea of what the top 10 brands on Amazon India have been selling for in the last 5 days. First of all on March 1, 2023, the average actual selling price of fryer across brands was 7084₹, while the highest suggested retail price of the Kiran Enterprise's fryer was a whopping 27500. The average discount rate on this day was 54%. The discount was substantial on this day, making it a worthwhile day to purchase a fryer. Next, it's 3/2/2023. The highest actual retail price product on this day sold for 15999 from PHILIPS. Next, it's 3/3/2023. The highest actual retail price product on this day sold for 8739 from Kiran Enterprise, while the lowest retail price was for KIING at just 4266₹. Subsequently, it's 3/5/2023. The highest actual retail price product on this day sold for 4505 from Inalsa. The last day was March 6, 2023, on which a total of 1 vendors sold fryers at an average actual selling price of 3795₹, while the average suggested retail price was 8900₹. Overall, looking at the past few days, the best day to buy fryers was March 1, 2023, with an average actual retail price of just 3795.₹"
+	}
+}

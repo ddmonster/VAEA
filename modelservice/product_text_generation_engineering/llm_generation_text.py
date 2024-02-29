@@ -10,8 +10,8 @@ class LLM_Genertion_Text:
     This class encapsulates a method for generating product introduction text based on LLAMA2.
 '''
 class LLM_Genertion_Text(LLM_Model):
-    def __init__(self):
-        super().__init__()
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
         self.dp = Documentation_Planning()
         self.mp = Micro_Planning()
         self.config = Config()

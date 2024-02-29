@@ -31,6 +31,7 @@ class Config():
         return os.path.join(self.db_folder_path(),'images')
 
     def model_name(self):
+
         return "llama2:70b"
 
     def prompt_info(self):

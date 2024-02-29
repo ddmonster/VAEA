@@ -29,7 +29,8 @@
             cp = document.getElementById("caption");
             cp.innerHTML = words;
         }
-        function directive(text) {
+
+        function get_directive(text) {
             fetch("/instruction",
                 {
                     headers: {
@@ -51,6 +52,11 @@
 
                 })
                 .catch(function (res) { console.log(res) })
+        }
+        function invoke(){
+           t =  document.getElementById("instruction").text;
+           console.log(t)
+            get_directive(t);
         }
         function onloadboday() {
             document.siri = create_siri();
@@ -154,6 +160,8 @@
     <div id="output"></div>
     <button onclick="startSpeaking()">Start Speaking</button>
     <button onclick="stopSpeaking()">Stop Speaking</button>
+    <input type="text" id="instruction">
+    <button type="button"  onclick="invoke()">submit</button>
 </body>
 
 </html>

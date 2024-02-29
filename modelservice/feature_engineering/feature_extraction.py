@@ -6,8 +6,8 @@ class Feature_Engineering:
     This class encapsulates the methods for feature extraction
 '''
 class Feature_Engineering(LLM_Model):
-    def __init__(self):
-        super().__init__()
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
         self.cu =Common_Utils()
         self.init_feature_group = {
             'basic_info': ['product_name', 'brand', 'Manufacturer', 'Model_Name'],
