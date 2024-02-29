@@ -2,3 +2,5 @@
 .$System Architecture Diagram.drawio.bkp
 .pytest_cache
 .idea
+__pycache__
+.vscode

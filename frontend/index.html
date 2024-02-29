@@ -2,58 +2,151 @@
 <html>
 
 <head>
+    <style>
+        #container-9 {
+            width: 600px;
+            height: 300px;
+            background-size: cover;
+            margin: 20px;
+            margin: 0 auto;
+            border: 1px dashed rgba(255, 255, 255, 0.4);
+        }
+        #voice {
+            position: relative;
+        }
+        #caption {
+            margin: 20px;
+             margin: 0 auto;
+             position:absolute;
+             top:0;
+        }
+    </style>
+    <script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
     <script>
+        function set_caption(words) {
+            cp = document.getElementById("caption");
+            cp.innerHTML = words;
+        }
+        function directive(text) {
+            fetch("/instruction",
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: "POST",
+                    body: JSON.stringify({ instruction: text })
+                })
+                .then(function (res) {
+                    console.log(res);
+                    data = res.json()
+                    product_introduction = data.product_introduction
+                    image_path = data.image_path
+                    dashboard_1 = data.dashboard_1
+                    dashboard_2 = data.dashboard_2
+                    dashboard_3 = data.dashboard_3
+                    product_info = data.data
 
+                })
+                .catch(function (res) { console.log(res) })
+        }
+        function onloadboday() {
+            document.siri = create_siri();
+        }
 
-
-    function getCogn(){
-        const SpeechRecognition =
+        function getCogn() {
+            const SpeechRecognition =
                 window.SpeechRecognition || window.webkitSpeechRecognition;
-        const SpeechGrammarList =
-            window.SpeechGrammarList || window.webkitSpeechGrammarList;
-        const SpeechRecognitionEvent =
-            window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+            const SpeechGrammarList =
+                window.SpeechGrammarList || window.webkitSpeechGrammarList;
+            const SpeechRecognitionEvent =
+                window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
 
-        const SpeechSynthesisUtterance =  window.SpeechSynthesisUtterance;
-        const speechSynthesis = window.speechSynthesis;
+            const SpeechSynthesisUtterance = window.SpeechSynthesisUtterance;
+            const speechSynthesis = window.speechSynthesis;
 
 
 
-        const recognition = new SpeechRecognition();
-        const speechRecognitionList = new SpeechGrammarList();
-        recognition.grammars = speechRecognitionList;
-        recognition.continuous = false;
-        recognition.lang = "en-US";
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
-        return recognition;
-    }
-    recognition = getCogn();
+            const recognition = new SpeechRecognition();
+            const speechRecognitionList = new SpeechGrammarList();
+            recognition.grammars = speechRecognitionList;
+            recognition.continuous = true;
+            recognition.lang = "en-US";
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+            return recognition;
+        }
+        recognition = getCogn();
 
-    function startSpeaking() {
-        recognition.start();
-        console.log("Ready to receive a color command.");
-    };
-    function speak(words){
-        let help = new window.SpeechSynthesisUtterance(words);
-        help.lang = "en-US";
-        help.voice = window.speechSynthesis.getVoices()[0];
-        window.speechSynthesis.speak(help);
-        return help;
-    }
-    recognition.onresult = (event) => {
-        console.log(event)
-        recognition.stop();
-        let utterance = new SpeechSynthesisUtterance(event.results[0][0].transcript);
-        speechSynthesis.speak(utterance);
-        console.log()
-    };
-    function onloadboday(){
-                console.log("loaded")
-                speak("hello")
-            }
+        function create_siri() {
+            siri = new SiriWave({
+                style: "ios9",
+                container: document.getElementById("container-9"),
+                autostart: true,
+                speed: 0.05,
+                amplitude: 0.08
+            });
+            return siri
+        }
+        function set_siri_silence() {
+            siri.setAmplitude(0.1);
+            siri.setSpeed(0.05);
+        }
+
+        function set_siri_activate() {
+            siri.setAmplitude(1);
+            siri.setSpeed(0.2);
+        }
+        recognition.onaudiostart = e => {
+            set_siri_activate();
+        }
+        recognition.onaudioend = e => {
+            set_siri_silence();
+        }
+
+
+        function startSpeaking() {
+            recognition.start();
+            console.log("Ready to receive a command.");
+        };
+        function speak(words) {
+
+            set_siri_activate();
+            let help = new window.SpeechSynthesisUtterance(words);
+            help.lang = "en-US";
+            help.voice = window.speechSynthesis.getVoices()[0];
+            window.speechSynthesis.speak(help);
+            set_caption(words);
+            set_siri_silence();
+            return help;
+        }
+        function gap_speak(words) {
+            setTimeout(() => speak(words), 1000);
+        }
+        recognition.onresult = (event) => {
+            instruction = event.results[0][0].transcript
+            console.log(event)
+            recognition.stop();
+            gap_speak(instruction)
+            console.log()
+        };
+
+
     </script>
 </head>
+<div id="voice">
+    <div id="container-9"></div>
+
+
+    <div id="caption"> </div>
+
+</div>
+
+<script>
+
+
+
+</script>
 
 <body onload="onloadboday()">
     <div id="output"></div>
