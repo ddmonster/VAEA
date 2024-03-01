@@ -5,6 +5,7 @@ from result_sample import result as fake_result
 from pathlib import Path
 from pydantic import BaseModel
 import re
+
 file_path = Path(__file__).parent.resolve()
 static_dir = file_path.joinpath("frontend")
 chart_dir = file_path.joinpath("modelservice").joinpath("chart").joinpath("chart_html")
@@ -54,8 +55,11 @@ class Instruction(BaseModel):
 
 @app.post("/instruction/")
 async def invoke_model(instruction: Instruction):
+    from modelservice.main import Product_Introduce_NLG
+
+    instance = Product_Introduce_NLG()
     print(instruction)
-    result: dict = app.state.model.main_run(sentence=instruction)
+    result: dict = instance.main_run(sentence=instruction)
     print(result)
     return result_process(result)
 
