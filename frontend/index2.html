@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commercial-Quality Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel=" short icon" href="VAEA.ico"/>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('');
+            background-size: cover;
+            background-position: center;
+            transform-style: preserve-3d;
+	        transform: perspective(800px);
+        }
+        
+        a {
+	position: relative;
+	display: inline-block;
+	padding: 1.2em 2em;
+	text-decoration: none;
+	text-align: center;
+	cursor: pointer;
+	user-select: none;
+	color: white;
+	
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background: linear-gradient(135deg, #6e8efb, #a777e3);
+		border-radius: 4px;
+		transition: box-shadow .5s ease, transform .2s ease; 
+		will-change: transform;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+		transform:
+			translateY(var(--ty, 0))
+			rotateX(var(--rx, 0))
+			rotateY(var(--ry, 0))
+			translateZ(var(--tz, -12px));
+	}
+	
+	&:hover::before {
+		box-shadow: 0 5px 15px rgba(0, 0, 0, .3);
+	}
+	
+	&::after {
+		position: relative;
+		display: inline-block;
+		content: attr(data-title);
+		transition: transform .2s ease; 
+		font-weight: bold;
+		letter-spacing: .01em;
+		will-change: transform;
+		transform:
+			translateY(var(--ty, 0))
+			rotateX(var(--rx, 0))
+			rotateY(var(--ry, 0));
+	}
+}
+
+/* body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	transform-style: preserve-3d;
+	transform: perspective(800px);
+} */
+
+        #container-9 {
+            width: 100vw;
+            height: 10vh;
+            background-size: cover;
+            margin: 20px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #voice {
+            position: relative;
+        }
+        #caption {
+            margin: 20px;
+             margin: 0 auto;
+             position:absolute;
+             top:0;
+        }
+        .container {
+            display: flex;
+            width: auto;
+            height: 90vh;
+            flex-direction:row;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        #left{
+            width: 500px;
+            text-align: left;
+            justify-content: left;
+            background-color: #DCDCDC;
+        }
+        #righ{
+            width:1000px;
+            height: 600px;
+        }b
+        #introducing{
+            overflow: scroll;
+            height: 300px;
+            width: 500px;
+        }
+        #product-display {
+            text-align: center;
+            width: 200px;
+            height: auto;
+        }
+
+        #product-image {
+            width: 100px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #attributes {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        #iframe-container {
+            width: 1000px;
+            height: 600px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        iframe{
+            width: 950px;
+            height: 550px;  
+        }
+        #page-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            /* background-color: #007bff; */
+            background-image: url(VAEA.ico);
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            /* background-color: #0056b3; */
+            background-image: url(VAEA.ico);
+        }
+
+        #voice-input {
+            margin-top: 20px;
+            padding: 15px 30px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 10px rgba(40, 167, 69, 0.5);
+        }
+
+        #voice-input:hover {
+            background-color: #218838;
+        }
+
+        #bottom-buttons {
+            display: flex;
+            justify-content: center;
+        }
+
+        #bottom-buttons button {
+            margin: 0 10px;
+        }
+    </style>
+    <script>
+        const docStyle = document.documentElement.style
+        const aElem = document.querySelector('a')
+        const boundingClientRect = aElem.getBoundingClientRect()
+        
+        aElem.onmousemove = function(e) {
+        
+            const x = e.clientX - boundingClientRect.left
+            const y = e.clientY - boundingClientRect.top
+            
+            const xc = boundingClientRect.width/2
+            const yc = boundingClientRect.height/2
+            
+            const dx = x - xc
+            const dy = y - yc
+            
+            docStyle.setProperty('--rx', `${ dy/-1 }deg`)
+            docStyle.setProperty('--ry', `${ dx/10 }deg`)
+            
+        }
+        
+        aElem.onmouseleave = function(e) {
+            
+            docStyle.setProperty('--ty', '0')
+            docStyle.setProperty('--rx', '0')
+            docStyle.setProperty('--ry', '0')
+            
+        }
+        
+        aElem.onmousedown = function(e) {
+            
+            docStyle.setProperty('--tz', '-25px')
+            
+        }
+        
+        document.body.onmouseup = function(e) {
+            
+            docStyle.setProperty('--tz', '-12px')
+            
+        }
+    </script>
+    <script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
+    <script>
+        let resData = {};
+        let setDash = {};
+        let speaking_func = {};
+        function set_dash_1(){
+            setDash.d1()
+        }
+        function set_dash_2(){
+            setDash.d2()
+        }
+        function set_dash_3(){
+            setDash.d3()
+        }
+        function set_caption(words) {
+            cp = document.getElementById("caption");
+            cp.innerHTML = words;
+        }
+        function set_product_info(img_path,info){
+            img_con = document.getElementById("img_container");
+            img_con.innerHTML = `<img id="product-image" alt="Product Image" src="${img_path}">`;
+
+            product_div = document.getElementById("attributes")
+            product_div.innerHTML = `<p>Name:${info.product_name}</p>` + 
+            `<p>Brand:${info.brand}</p>`+
+            `<p>StarRating:${info.star_rating}</p>`+
+             `<p>Price:₹${info.sale_price}</p>`
+
+        }
+
+        function set_chart_info(dash){
+            iframe = document.getElementById("iframe");
+            iframe.src = dash;
+
+        }
+        function directive(text) {
+            fetch("/instruction_t",
+                {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: "POST",
+                    body: JSON.stringify({ instruction: text })
+                })
+                .then(function (res) {
+                    console.log(res);
+                    data = res.json().then((data)=>{
+                        console.log(data);
+                        resData = data;
+                        product_introduction = data.data;
+                        image_path = data.image_path;
+                        dashboard_1 = data.dashboard_1;
+                        dashboard_2 = data.dashboard_2;
+                        dashboard_3 = data.dashboard_3;
+                        set_product_info(image_path,product_introduction);
+                        set_chart_info(dashboard_1.html_path);
+                        document.getElementById("introducing").innerHTML = `<p style="overflow:scroll">${data.product_introduction}</p>`;
+                        setDash.d1 = ()=>{
+                            set_chart_info(dashboard_1.html_path);
+                        }
+                        setDash.d2 = ()=>{
+                            set_chart_info(dashboard_2.html_path);
+                        }
+                        setDash.d3 = ()=>{
+                            set_chart_info(dashboard_3.html_path);
+                        }
+                        speak(`I have found  ${data.data.product_name}, What would you like me to do`);
+                        speaking_func.describe = () =>{
+                            speak(data.product_introduction);
+                        }
+                        speaking_func.price = () =>{
+                            speak("₹"+data.data.sale_price);
+                        }
+                        speaking_func.map_call = () =>{
+                            set_chart_info(dashboard_1.html_path);
+                            speak(dashboard_1.text);
+                        }
+                        speaking_func.bar_call = () =>{
+                            set_chart_info(dashboard_2.html_path);
+                            speak(dashboard_2.text);
+                        }
+                        speaking_func.flow_call = () =>{
+                            set_chart_info(dashboard_3.html_path);
+                            speak(dashboard_3.text);
+                        }
+                        product_info = data.data
+                    });
+
+                    
+                })
+                .catch(function (res) { console.log(res) })
+        }
+        function onloadboday() {
+            document.siri = create_siri();
+            window.speechSynthesis.cancel();
+        }
+
+        function getCogn() {
+            const SpeechRecognition =
+                window.SpeechRecognition || window.webkitSpeechRecognition;
+            const SpeechGrammarList =
+                window.SpeechGrammarList || window.webkitSpeechGrammarList;
+            const SpeechRecognitionEvent =
+                window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+            const grammar =
+  "#JSGF V1.0; grammar colors; public <color> = aqua | azure | beige | bisque | black | blue | brown | chocolate | coral | crimson | cyan | fuchsia | ghostwhite | gold | goldenrod | gray | green | indigo | ivory | khaki | lavender | lime | linen | magenta | maroon | moccasin | navy | olive | orange | orchid | peru | pink | plum | purple | red | salmon | sienna | silver | snow | tan | teal | thistle | tomato | turquoise | violet | white | yellow ;";
+            const SpeechSynthesisUtterance = window.SpeechSynthesisUtterance;
+            const speechSynthesis = window.speechSynthesis;
+
+
+
+            const recognition = new SpeechRecognition();
+            const speechRecognitionList = new SpeechGrammarList();
+            speechRecognitionList.addFromString(grammar, 1);
+            recognition.grammars = speechRecognitionList;
+            recognition.continuous = true;
+            recognition.lang = "en-US";
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+            return recognition;
+        }
+        recognition = getCogn();
+
+        function create_siri() {
+            siri = new SiriWave({
+                style: "ios9",
+                container: document.getElementById("container-9"),
+                autostart: true,
+                speed: 0.05,
+                amplitude: 0.08
+            });
+            return siri
+        }
+        function set_siri_silence() {
+            siri.setAmplitude(0.1);
+            siri.setSpeed(0.05);
+        }
+
+        function set_siri_activate() {
+            siri.setAmplitude(1);
+            siri.setSpeed(0.2);
+        }
+        recognition.onaudiostart = e => {
+            set_siri_activate();
+        }
+        recognition.onaudioend = e => {
+            set_siri_silence();
+        }
+
+
+        function startSpeaking() {
+            recognition.start();
+            window.speechSynthesis.cancel();
+            console.log("Ready to receive a command.");
+        };
+
+        function speak(words) {
+
+            set_siri_activate();
+            let help = new window.SpeechSynthesisUtterance(words);
+            document.speaking = help;
+            help.lang = "en-US";
+            help.voice = window.speechSynthesis.getVoices()[0];
+            window.speechSynthesis.speak(help);
+            
+            
+            set_siri_silence();
+            return help;
+        }
+        function gap_speak(words) {
+            setTimeout(() => speak(words), 1000);
+        }
+        recognition.onresult = (event) => {
+            recognition.stop();
+            instruction = event.results[0][0].transcript.toLowerCase();
+            set_caption(instruction);
+            if(instruction.includes("describe")){
+                speaking_func.describe();
+                return
+            }
+            if(instruction.includes("price")){
+                 speaking_func.price();
+                 return
+            }
+            if(instruction.includes("map") || instruction.includes("supplier") ){
+                console.log("map");
+                speaking_func.map_call();
+                 return
+            }   
+            if(instruction.includes("flow") || (instruction.includes("top") && instruction.includes("brands")) ){
+            console.log("flow");
+                speaking_func.flow_call();
+                 return
+            }
+            if(instruction.includes("bar") || instruction.includes("brand") || instruction.includes("brand")){
+                console.log("bar");
+                speaking_func.bar_call();
+                 return
+            }
+
+            directive(instruction);
+            console.log(event)
+            
+        };
+
+
+    </script>
+</head>
+<body onload="onloadboday()"></body>
+<div id="voice" onclick="startSpeaking()">
+    
+    <div id="container-9"></div>
+
+
+    <div id="caption"> </div>
+
+</div>
+<div class="container">
+    <div id="left">
+        <div id="product-display">
+            <div id="img_container"></div>
+            
+            <div id="attributes">
+                <p>No Content</p>
+            </div>
+            <div id="introducing"></div>
+        </div>
+    </div>
+    <div id="right">
+        <div id="iframe-container">
+            <iframe id="iframe" frameborder="0" ></iframe>
+        </div>
+        <div id="page-buttons">
+            <!-- <button onclick="set_dash_1()">Map</button> -->
+            <a href="#" data-title="Map" onclick="set_dash_1"></a>
+            <a href="#" data-title="Bar" onclick="set_dash_2"></a>
+            <a href="#" data-title="flow" onclick="set_dash_3"></a>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
