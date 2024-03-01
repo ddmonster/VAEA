@@ -52,9 +52,11 @@
         }
 
         #left{
+            display: flex;
             width: 500px;
             text-align: left;
             justify-content: left;
+            flex-direction: row;
         }
         #righ{
             width:1000px;
@@ -177,7 +179,8 @@
 
         }
         function directive(text) {
-            fetch("/instruction/",
+            speak("searching for you please wait");
+            fetch("/instruction_t/",
                 {
                     headers: {
                         'Accept': 'application/json',
@@ -197,18 +200,33 @@
                         dashboard_2 = data.dashboard_2;
                         dashboard_3 = data.dashboard_3;
                         set_product_info(image_path,product_introduction);
-                        set_chart_info(dashboard_1.html_path);
-                        document.getElementById("introducing").innerHTML = `<p style="overflow:scroll">${data.product_introduction}</p>`;
+
+                        document.getElementById("introducing").innerHTML = `<p >${data.product_introduction}</p>`;
+                        document.getElementById("introducing").style.visibility = "visible";
                         setDash.d1 = ()=>{
+                            if(dashboard_1 == null){
+                                 speak("missing map");
+                                 return
+                        }
+
                             set_chart_info(dashboard_1.html_path);
                         }
                         setDash.d2 = ()=>{
+                                                        if(dashboard_2 == null){
+                                 speak("missing chart");
+                                 return
+                        }
                             set_chart_info(dashboard_2.html_path);
                         }
-                        setDash.d3 = ()=>{
+                    setDash.d3 = ()=>{
+                                                        if(dashboard_3 == null){
+                                 speak("missing flow");
+                                 return
+                        }
                             set_chart_info(dashboard_3.html_path);
                         }
-                        speak(`I have found  ${data.data.product_name}, What would you like me to do`);
+                        setDash.d1();
+
                         speaking_func.describe = () =>{
                             speak(data.product_introduction);
                         }
@@ -227,12 +245,12 @@
                             set_chart_info(dashboard_3.html_path);
                             speak(dashboard_3.text);
                         }
-                        product_info = data.data
+                         speak([`I have found  ${data.data.product_name}`," What would you like me to do"]);
                     });
 
                     
                 })
-                .catch(function (res) { console.log(res) })
+                .catch(function (res) { console.log(res);alert() })
         }
         function onloadboday() {
             document.siri = create_siri();
@@ -297,19 +315,46 @@
             window.speechSynthesis.cancel();
             console.log("Ready to receive a command.");
         };
+        function select_voice(){
+            let voice = null;
+            window.speechSynthesis.getVoices().forEach((val,index,array) =>{
 
+                if(val.lang=="en-US") {
+
+                    voice = val;
+                }
+            })
+             console.log(voice);
+            return voice;
+        }
+        function speaking_words(words){
+                set_siri_activate();
+                console.log(words);
+                let help = new window.SpeechSynthesisUtterance(words);
+                help.onstart = (e) =>{
+                    set_caption(words);
+                }
+                document.speaking = help;
+                help.lang = "en-US";
+                help.voice =voice;
+                window.speechSynthesis.speak(help);
+                set_siri_silence();
+        }
         function speak(words) {
+            voice = select_voice();
+            if (typeof words == "string"){
+                    words.split(",").forEach((val)=>{
+                        speaking_words(val);
+                    })
 
-            set_siri_activate();
-            let help = new window.SpeechSynthesisUtterance(words);
-            document.speaking = help;
-            help.lang = "en-US";
-            help.voice = window.speechSynthesis.getVoices()[0];
-            window.speechSynthesis.speak(help);
-            
-            
-            set_siri_silence();
-            return help;
+
+            }else{
+                words.forEach((val,index,ob) =>{
+                                speak(val);
+                })
+            }
+
+
         }
         function gap_speak(words) {
             setTimeout(() => speak(words), 1000);
@@ -360,14 +405,16 @@
 </div>
 <div class="container">
     <div id="left">
+
         <div id="product-display">
             <div id="img_container"></div>
             
             <div id="attributes">
                 <p>No Content</p>
             </div>
-            <div id="introducing"></div>
+            <div id="introducing" style="visibility: hidden"></div>
         </div>
+        <img style="display: flex; height: 300px;width: 300px" src="/static/VAEA.jpg" >
     </div>
     <div id="right">
         <div id="iframe-container">

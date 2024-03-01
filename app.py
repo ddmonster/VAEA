@@ -15,8 +15,9 @@ import re
 
 def filter_str(desstr, restr=""):
     # 过滤除中英文及数字以外的其他字符
-    res = re.compile("[^\\u4e00-\\u9fa5^a-z^A-Z^0-9\.\,\n\ ]")
-    return res.sub(restr, desstr)
+    res = re.compile("[^\\u4e00-\\u9fa5^a-z^A-Z^0-9\.\,\n\ !\-\'\"]")
+    rs = res.sub(restr, desstr)
+    return rs.split(".")
 
 
 def test_in_app():
@@ -37,25 +38,28 @@ async def index_page():
 
 def result_process(result: dict):
     print(result)
-    get_name = lambda x: x.split("\\")[-1]
-    result["product_introduction"] = filter_str(result["product_introduction"])
-    img_path = get_name(result["image_path"])
-    result["image_path"] = f"/img/{img_path}"
-    d1 = result.get("dashboard_1")
-    d2 = result.get("dashboard_2")
-    d3 = result.get("dashboard_3")
-    if d1:
-        name = get_name(d1["html_path"])
-        d1["text"] = filter_str(d1["text"])
-        result["dashboard_1"]["html_path"] = f"/chart/{name}"
-    if d2:
-        name = get_name(d2["html_path"])
-        d2["text"] = filter_str(d2["text"])
-        result["dashboard_2"]["html_path"] = f"/chart/{name}"
-    if d3:
-        name = get_name(d3["html_path"])
-        d3["text"] = filter_str(d3["text"])
-        result["dashboard_3"]["html_path"] = f"/chart/{name}"
+    try:
+        get_name = lambda x: x.split("\\")[-1]
+        result["product_introduction"] = filter_str(result["product_introduction"])
+        img_path = get_name(result["image_path"])
+        result["image_path"] = f"/img/{img_path}"
+        d1 = result.get("dashboard_1")
+        d2 = result.get("dashboard_2")
+        d3 = result.get("dashboard_3")
+        if d1:
+            name = get_name(d1["html_path"])
+            d1["text"] = filter_str(d1["text"])
+            result["dashboard_1"]["html_path"] = f"/chart/{name}"
+        if d2:
+            name = get_name(d2["html_path"])
+            d2["text"] = filter_str(d2["text"])
+            result["dashboard_2"]["html_path"] = f"/chart/{name}"
+        if d3:
+            name = get_name(d3["html_path"])
+            d3["text"] = filter_str(d3["text"])
+            result["dashboard_3"]["html_path"] = f"/chart/{name}"
+    except:
+        pass
     return result
 
 
